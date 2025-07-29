@@ -22,4 +22,20 @@ class Media extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function getUrlAttribute()
+    {
+        return asset('storage/' . $this->file_path);
+    }
+
+    public function fileExists()
+    {
+        return file_exists(storage_path('app/public/' . $this->file_path));
+    }
+
+    // Method untuk debug
+    public function getFullPathAttribute()
+    {
+        return storage_path('app/public/' . $this->file_path);
+    }
 }

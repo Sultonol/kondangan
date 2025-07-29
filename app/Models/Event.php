@@ -18,17 +18,12 @@ class Event extends Model
         'event_date',
         'location',
         'dress_code_image',
-        'schedule',
-        'bank_name',
-        'account_number',
-        'account_holder',
         'invitation_code',
         'is_active'
     ];
 
     protected $casts = [
         'event_date' => 'datetime',
-        'schedule' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -45,5 +40,37 @@ class Event extends Model
     public function media(): HasMany
     {
         return $this->hasMany(Media::class);
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(EventSchedule::class)->orderBy('order')->orderBy('start_time');
+    }
+
+    public function banks(): HasMany
+    {
+        return $this->hasMany(EventBank::class);
+    }
+
+    // Helper methods for media types - Pastikan relasi benar
+    public function images(): HasMany
+    {
+        return $this->hasMany(Media::class)->where('type', 'image');
+    }
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(Media::class)->where('type', 'video');
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Media::class)->where('type', 'document');
+    }
+
+    // Helper method to get dress code image URL
+    public function getDressCodeImageUrlAttribute()
+    {
+        return $this->dress_code_image ? asset('storage/' . $this->dress_code_image) : null;
     }
 }

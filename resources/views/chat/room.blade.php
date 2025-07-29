@@ -1,17 +1,19 @@
 @extends('layouts.app')
 @section('title', $event->title)
+
 @section('content')
 <div class="flex h-screen bg-gradient-to-br from-slate-50 to-gray-100">
     <!-- Sidebar -->
     <div class="w-80 bg-white/90 backdrop-blur-xl border-r border-gray-200/50 flex flex-col shadow-xl">
         <!-- Header -->
-        <div class="p-6 border-b border-gray-200/50 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 relative overflow-hidden">
+        <div class="p-6 border-b border-gray-200/50 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 relative overflow-hidden cursor-pointer hover:from-rose-600 hover:via-pink-600 hover:to-purple-700 transition-all duration-300"
+             onclick="window.location.href='{{ route('event.description', $event->id) }}'">
             <!-- Background pattern -->
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"></div>
                 <div class="absolute bottom-0 right-0 w-24 h-24 bg-white rounded-full translate-x-12 translate-y-12"></div>
             </div>
-            
+                        
             <div class="flex items-center space-x-4 relative z-10">
                 <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30">
                     <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -26,10 +28,11 @@
                         </svg>
                         {{ $event->participants->count() }} participants
                     </p>
+                    <p class="text-xs opacity-75 mt-1">Click for wedding details</p>
                 </div>
             </div>
         </div>
-
+        
         <!-- Participants List -->
         <div class="flex-1 overflow-y-auto scrollbar-thin">
             <div class="p-4">
@@ -39,7 +42,7 @@
                         <span class="text-xs font-bold text-white">{{ $event->participants->where('is_online', true)->count() }}</span>
                     </div>
                 </div>
-                
+                                
                 <div class="space-y-2">
                     @foreach($event->participants as $p)
                     <div class="flex items-center space-x-3 p-3 rounded-2xl hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 cursor-pointer participant-item transition-all duration-300 group border border-transparent hover:border-rose-200/50"
@@ -72,18 +75,19 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Chat Area -->
     <div class="flex-1 flex flex-col">
         <!-- Chat Header -->
         <div class="p-6 bg-white/90 backdrop-blur-xl border-b border-gray-200/50 flex items-center justify-between shadow-sm">
-            <div>
+            <div class="cursor-pointer hover:bg-gray-50 rounded-2xl p-3 transition-colors duration-200 flex-1"
+                 onclick="window.location.href='{{ route('event.description', $event->id) }}'">
                 <h1 class="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">{{ $event->title }}</h1>
                 <p class="text-sm text-gray-500 flex items-center mt-1">
                     <svg class="w-4 h-4 mr-2 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h3a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h3z"></path>
                     </svg>
-                    {{ $event->event_date->format('d M Y, H:i') }}
+                    {{ $event->event_date->format('d M Y, H:i') }} • Click for details
                 </p>
             </div>
             <div class="flex space-x-3">
@@ -99,7 +103,7 @@
                 </button>
             </div>
         </div>
-
+        
         <!-- Messages Area -->
         <div id="messagesContainer" class="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin bg-gradient-to-b from-gray-50/50 to-white/50">
             @foreach($messages as $message)
@@ -119,7 +123,7 @@
             </div>
             @endforeach
         </div>
-
+        
         <!-- Message Input -->
         <div class="p-6 bg-white/90 backdrop-blur-xl border-t border-gray-200/50">
             <form id="messageForm" class="flex space-x-4">
@@ -221,7 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function scrollToBottom() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
-
     scrollToBottom();
 
     // Send message
@@ -313,4 +316,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 @endsection
