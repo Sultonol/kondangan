@@ -4,243 +4,742 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Group Hajatan</title>
+    <title>Hajatan Akhir Tahun - Wedding Celebration</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #F8EAD0 0%, #F5E6C8 50%, #F2E2C0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><pattern id=%22traditional%22 x=%220%22 y=%220%22 width=%2220%22 height=%2220%22 patternUnits=%22userSpaceOnUse%22><circle cx=%2210%22 cy=%2210%22 r=%222%22 fill=%22%238B7355%22 opacity=%220.1%22/><path d=%22M5,5 Q10,2 15,5 Q18,10 15,15 Q10,18 5,15 Q2,10 5,5%22 fill=%22none%22 stroke=%22%238B7355%22 stroke-width=%220.3%22 opacity=%220.1%22/></pattern></defs><rect width=%22100%22 height=%22100%22 fill=%22url(%23traditional)%22/></svg>');
+            background-size: 80px 80px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        /* Main Header */
+        .main-header {
+            background: rgba(248, 234, 208, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(139, 115, 85, 0.2);
+            border-bottom: 1px solid #E8D5B7;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .hamburger {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 2px 0;
+        }
+        
+        .hamburger span {
+            width: 100%;
+            height: 2px;
+            background: #8B7355;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger:hover span {
+            background: #C9A876;
+        }
+        
+        .whatsup-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #8B7355;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .whatsup-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #C9A876, #B8956A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(201, 168, 118, 0.3);
+        }
+        
+        .download-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C9A876, #B8956A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(201, 168, 118, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(135deg, #B8956A, #A0845C);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(201, 168, 118, 0.4);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            min-height: calc(100vh - 80px);
+            position: relative;
+            z-index: 1;
+            margin: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(232, 213, 183, 0.5);
+            box-shadow: 0 8px 32px rgba(139, 115, 85, 0.1);
+        }
+        
+        .group-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #D4B896, #C9A876, #B8956A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(201, 168, 118, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        .group-avatar:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(201, 168, 118, 0.4);
+        }
+        
+        .group-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .group-avatar .fallback {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            padding: 20px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .group-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8B7355;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: -0.5px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 0 2px 4px rgba(139, 115, 85, 0.1);
+        }
+        
+        .join-button {
+            background: linear-gradient(135deg, #C9A876, #B8956A);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(201, 168, 118, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 60px;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .join-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .join-button:hover::before {
+            left: 100%;
+        }
+        
+        .join-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(201, 168, 118, 0.4);
+            background: linear-gradient(135deg, #B8956A, #A0845C);
+        }
+        
+        .join-button:active {
+            transform: translateY(0) scale(1);
+        }
+        
+        .join-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .join-button:disabled::before {
+            display: none;
+        }
+        
+        .disclaimer {
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .disclaimer-text {
+            color: #A0845C;
+            font-size: 15px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .download-link {
+            color: #C9A876;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .download-link:hover {
+            color: #B8956A;
+            text-decoration: underline;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Success/Error Messages */
+        .message {
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .message.success {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1));
+            color: #166534;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .message.error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            color: #991b1b;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .message.warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+            color: #92400e;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Welcome Text */
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 500px;
+        }
+
+        .welcome-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8B7355;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .welcome-subtitle {
+            font-size: 14px;
+            color: #A0845C;
+            line-height: 1.5;
+        }
+
+        /* Decorative Elements */
+        .decorative-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #C9A876, #B8956A);
+            margin: 20px auto;
+            border-radius: 1px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 40px 16px;
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .group-avatar {
+                width: 160px;
+                height: 160px;
+                margin-bottom: 24px;
+            }
+            
+            .group-avatar .fallback {
+                font-size: 18px;
+                padding: 16px;
+            }
+            
+            .group-name {
+                font-size: 24px;
+                margin-bottom: 32px;
+            }
+            
+            .join-button {
+                padding: 14px 40px;
+                font-size: 15px;
+                margin-bottom: 48px;
+                min-width: 180px;
+            }
+            
+            .main-header {
+                padding: 12px 16px;
+            }
+            
+            .whatsup-logo {
+                font-size: 18px;
+            }
+            
+            .download-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .welcome-title {
+                font-size: 16px;
+            }
+
+            .welcome-subtitle {
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .group-avatar {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .group-name {
+                font-size: 20px;
+            }
+            
+            .join-button {
+                padding: 12px 32px;
+                font-size: 14px;
+                min-width: 160px;
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .join-button::before {
+                display: none;
+            }
+        }
+        
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .disclaimer-text {
+                color: #5A4A3A;
+            }
+            
+            .group-name {
+                color: #5A4A3A;
+            }
+
+            .welcome-title {
+                color: #5A4A3A;
+            }
+
+            .welcome-subtitle {
+                color: #6B5B4F;
+            }
+        }
+        
+        /* Focus styles for accessibility */
+        .join-button:focus,
+        .download-btn:focus,
+        .download-link:focus {
+            outline: 3px solid rgba(201, 168, 118, 0.5);
+            outline-offset: 2px;
+        }
+        
+        .hamburger:focus {
+            outline: 2px solid #C9A876;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Enhanced animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-content > * {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .main-content > *:nth-child(1) { animation-delay: 0.1s; }
+        .main-content > *:nth-child(2) { animation-delay: 0.2s; }
+        .main-content > *:nth-child(3) { animation-delay: 0.3s; }
+        .main-content > *:nth-child(4) { animation-delay: 0.4s; }
+        .main-content > *:nth-child(5) { animation-delay: 0.5s; }
+        .main-content > *:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Backdrop blur support */
+        @supports (backdrop-filter: blur(10px)) {
+            .main-content {
+                backdrop-filter: blur(10px);
+            }
+            
+            .main-header {
+                backdrop-filter: blur(10px);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(248, 234, 208, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(201, 168, 118, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(184, 149, 106, 0.7);
+        }
+    </style>
 </head>
 <body>
-    @extends('layouts.app')
-@section('title', isset($event) ? 'Join ' . $event->title : 'Join Wedding Chat')
-
-@section('content')
-<div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-    <!-- Background decorations -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-rose-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-100/20 to-pink-100/20 rounded-full blur-3xl"></div>
+    <!-- Main Header -->
+    <div class="main-header">
+        <div class="hamburger" tabindex="0" role="button" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="whatsup-logo">
+            <div class=""></div>
+            What's Up
+        </div>
+        <button class="download-btn" aria-label="Download Wedding App">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+        </button>
     </div>
 
-    <div class="relative max-w-md w-full">
-        <!-- Main Card -->
-        <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 relative overflow-hidden">
-            <!-- Card decoration -->
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-400 via-pink-400 to-purple-400"></div>
-            
-            <div class="text-center mb-8">
-                <!-- Logo -->
-                <div class="relative w-20 h-20 mx-auto mb-6">
-                    <div class="w-20 h-20 bg-gradient-to-br from-rose-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg relative overflow-hidden">
-                        <div class="relative">
-                            <svg class="w-10 h-10 text-white animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                            <div class="absolute -top-1 -right-1 w-2 h-2 bg-yellow-300 rounded-full animate-ping"></div>
-                        </div>
-                    </div>
-                    <div class="absolute inset-0 rounded-full border-2 border-rose-200 animate-spin-slow"></div>
-                </div>
-
-                @if(isset($event))
-                    <!-- Event Info -->
-                    <h1 class="text-2xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-2 font-dancing">
-                        {{ $event->groom_name }} & {{ $event->bride_name }}
-                    </h1>
-                    <div class="text-sm text-gray-600 mb-2">
-                        {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y, H:i') }}
-                    </div>
-                    <p class="text-gray-600 font-medium">Join Wedding Chat</p>
-                @else
-                    <h1 class="text-2xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-2 font-dancing">
-                        Wedding Chat
-                    </h1>
-                    <p class="text-gray-600 font-medium">Join the Celebration</p>
-                @endif
-                
-                <div class="w-12 h-1 bg-gradient-to-r from-rose-400 to-purple-400 rounded-full mx-auto mt-3"></div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Success Message -->
+        @if(session('success'))
+            <div class="message success" role="alert">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                {{ session('success') }}
             </div>
+        @endif
 
-            <!-- Success Message -->
-            @if(session('success'))
-                <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-2xl">
-                    <p class="text-green-600 text-sm flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        {{ session('success') }}
-                    </p>
-                </div>
-            @endif
+        <!-- Error Message -->
+        @if(session('error'))
+            <div class="message error" role="alert">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                {{ session('error') }}
+            </div>
+        @endif
 
-            <!-- Error Message -->
-            @if(session('error'))
-                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl">
-                    <p class="text-red-600 text-sm flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        {{ session('error') }}
-                    </p>
-                </div>
-            @endif
+        <!-- No Active Event Message -->
+        @if(!isset($event))
+            <div class="message warning" role="alert">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Tidak ada acara yang aktif saat ini.
+            </div>
+        @endif
 
-            <!-- No Active Event Message -->
-            @if(!isset($event))
-                <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-2xl">
-                    <p class="text-yellow-600 text-sm flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Tidak ada acara yang aktif saat ini.
-                    </p>
-                </div>
-            @endif
+        <div class="decorative-line"></div>
 
-            @if(isset($event))
-                <form action="{{ route('join') }}" method="POST" class="space-y-5" id="joinForm">
-                    @csrf
-                    
-                    <!-- Name -->
-                    <div class="group">
-                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                            Your Name
-                        </label>
-                        <div class="relative">
-                            <input type="text"
-                                   id="name"
-                                   name="name"
-                                   value="{{ old('name') }}"
-                                   class="w-full px-4 py-3 pl-11 border-2 border-gray-200 rounded-xl focus:ring-3 focus:ring-pink-500/20 focus:border-pink-400 transition-all duration-300 bg-white/70 backdrop-blur-sm group-hover:border-pink-300 @error('name') border-red-300 @enderror"
-                                   placeholder="Enter your name"
-                                   required>
-                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
-                                <svg class="w-5 h-5 text-gray-400 group-focus-within:text-pink-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        @error('name')
-                            <p class="mt-2 text-sm text-red-500 flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                {{ $message }}
-                            </p>
-                        @enderror
-                        <p class="mt-1 text-xs text-gray-500">
-                            <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            If you've joined before, use the same name to continue
-                        </p>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="group">
-                        <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            Phone Number <span class="text-gray-400 font-normal">(Optional)</span>
-                        </label>
-                        <div class="relative">
-                            <input type="tel"
-                                   id="phone"
-                                   name="phone"
-                                   value="{{ old('phone') }}"
-                                   class="w-full px-4 py-3 pl-11 border-2 border-gray-200 rounded-xl focus:ring-3 focus:ring-purple-500/20 focus:border-purple-400 transition-all duration-300 bg-white/70 backdrop-blur-sm group-hover:border-purple-300"
-                                   placeholder="08123456789">
-                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
-                                <svg class="w-5 h-5 text-gray-400 group-focus-within:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        @error('phone')
-                            <p class="mt-2 text-sm text-red-500 flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit"
-                            id="joinButton"
-                            class="w-full bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white py-3 px-6 rounded-xl font-bold text-base hover:from-rose-600 hover:via-pink-600 hover:to-purple-700 transform hover:scale-[1.02] hover:shadow-xl transition-all duration-300 shadow-lg relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span class="relative z-10 flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                            <span id="buttonText">Join Chat</span>
-                        </span>
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    </button>
-                </form>
-
-                <!-- Participants Count -->
-                <div class="mt-6 text-center">
-                    <div class="flex items-center justify-center text-gray-500 text-sm">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                        </svg>
-                        <span>{{ $event->participants->count() }} people joined</span>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Footer decoration -->
-            <div class="mt-6 text-center">
-                <div class="flex items-center justify-center space-x-2 text-gray-400">
-                    <div class="w-6 h-px bg-gradient-to-r from-transparent to-gray-300"></div>
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
-                    <div class="w-6 h-px bg-gradient-to-l from-transparent to-gray-300"></div>
-                </div>
-                <p class="text-xs text-gray-500 mt-1 font-medium">Made with love</p>
+        <!-- Group Avatar -->
+        <div class="group-avatar">
+            <img src="/storage/events/images/logo.png" 
+                 alt="Hajatan Akhir Tahun Logo" 
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="fallback" style="display: none;">
+                HAJATAN<br>AKHIR<br>TAHUN
             </div>
         </div>
+
+        <!-- Group Name -->
+        <h1 class="group-name">HAJATAN AKHIR TAHUN</h1>
+
+        <!-- Join Button -->
+        @if(isset($event))
+            <form action="{{ route('join') }}" method="POST" id="joinForm">
+                @csrf
+                <button type="submit" class="join-button" id="joinButton">
+                    <span id="buttonText">🎊 Join Group</span>
+                </button>
+            </form>
+        @endif
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <p class="disclaimer-text">Tenang, ini bukan penipuan, guys!</p>
+        </div>
     </div>
-</div>
 
-<style>
-@keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-.animate-spin-slow {
-    animation: spin-slow 8s linear infinite;
-}
-</style>
+    <script>
+        // Handle form submission with loading state
+        document.getElementById('joinForm')?.addEventListener('submit', function(e) {
+            const button = document.getElementById('joinButton');
+            const buttonText = document.getElementById('buttonText');
+            
+            button.disabled = true;
+            buttonText.innerHTML = `
+                <div class="loading"></div>
+                Joining...
+            `;
+            
+            // Re-enable button after 5 seconds in case of error
+            setTimeout(() => {
+                if (button.disabled) {
+                    button.disabled = false;
+                    buttonText.innerHTML = '🎊 Join Celebration';
+                }
+            }, 5000);
+        });
 
-<script>
-// Handle form submission with loading state
-document.getElementById('joinForm')?.addEventListener('submit', function(e) {
-    const button = document.getElementById('joinButton');
-    const buttonText = document.getElementById('buttonText');
-    
-    button.disabled = true;
-    buttonText.textContent = 'Joining...';
-    
-    // Re-enable button after 3 seconds in case of error
-    setTimeout(() => {
-        button.disabled = false;
-        buttonText.textContent = 'Join Chat';
-    }, 3000);
-});
+        // Add interactive effects to hamburger menu
+        document.querySelector('.hamburger')?.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
 
-// Auto-focus on name input
-document.addEventListener('DOMContentLoaded', function() {
-    const nameInput = document.getElementById('name');
-    if (nameInput) {
-        nameInput.focus();
-    }
-});
-</script>
-@endsection
+        // Add click effect to download button
+        document.querySelector('.download-btn')?.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+
+        // Add keyboard support for hamburger menu
+        document.querySelector('.hamburger')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Add focus management for better accessibility
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus the join button when page loads if no error messages
+            const hasMessages = document.querySelector('.message');
+            const joinButton = document.getElementById('joinButton');
+            
+            if (!hasMessages && joinButton) {
+                setTimeout(() => {
+                    joinButton.focus();
+                }, 1000);
+            }
+        });
+
+        // Add visual feedback for button interactions
+        document.querySelectorAll('button, .download-link').forEach(element => {
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            element.addEventListener('mouseup', function() {
+                this.style.transform = '';
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+
+        // Add floating animation to decorative elements
+        function addFloatingAnimation() {
+            const avatar = document.querySelector('.group-avatar');
+            if (avatar) {
+                setInterval(() => {
+                    avatar.style.transform = 'translateY(-2px) scale(1.01)';
+                    setTimeout(() => {
+                        avatar.style.transform = 'translateY(0) scale(1)';
+                    }, 2000);
+                }, 4000);
+            }
+        }
+
+        // Initialize floating animation after page load
+        window.addEventListener('load', () => {
+            setTimeout(addFloatingAnimation, 2000);
+        });
+
+        // Add sparkle effect on button hover
+        document.getElementById('joinButton')?.addEventListener('mouseenter', function() {
+            // Create sparkle elements
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.innerHTML = '✨';
+                    sparkle.style.position = 'absolute';
+                    sparkle.style.fontSize = '12px';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.animation = 'sparkle 1s ease-out forwards';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    
+                    this.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 1000);
+                }, i * 200);
+            }
+        });
+
+        // Add sparkle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkle {
+                0% {
+                    opacity: 0;
+                    transform: scale(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1) rotate(180deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

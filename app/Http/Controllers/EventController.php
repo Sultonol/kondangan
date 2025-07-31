@@ -9,43 +9,43 @@ use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
+    /**
+     * Show join form untuk event aktif
+     */
     public function showJoinForm()
     {
         $event = Event::where('is_active', true)->first();
-
+        
         if (!$event) {
             return view('join')->with('error', 'Tidak ada acara yang aktif saat ini');
         }
-
+        
         return view('join', compact('event'));
     }
 
+    /**
+     * Handle join request (anonymous join tanpa nama)
+     */
     public function join(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20'
-        ]);
-
-        // Ambil event aktif pertama atau sesuaikan dengan kebutuhan
+        // Ambil event aktif pertama
         $event = Event::where('is_active', true)->first();
-
+        
         if (!$event) {
             return back()->withErrors(['event' => 'Tidak ada acara yang aktif saat ini.']);
         }
 
-        // Check if participant with same name already exists in this event
+        // Generate unique session ID jika belum ada
+        $sessionId = session()->getId();
+        
+        // Check if participant with same session already exists in this event
         $existingParticipant = Participant::where('event_id', $event->id)
-            ->where('name', $request->name)
+            ->where('session_id', $sessionId)
             ->first();
 
         if ($existingParticipant) {
-            // If participant exists, just login (update status and phone if provided)
-            $existingParticipant->update([
-                'phone' => $request->phone ?: $existingParticipant->phone,
-                'is_online' => true,
-                'last_seen' => now()
-            ]);
+            // If participant exists, just update status
+            $existingParticipant->setOnline();
 
             session([
                 'participant_id' => $existingParticipant->id,
@@ -53,17 +53,16 @@ class EventController extends Controller
             ]);
 
             return redirect()->route('chat.room', $event->id)
-                ->with('success', 'Selamat datang kembali, ' . $existingParticipant->name . '!');
+                ->with('success', 'Selamat datang kembali!');
         }
 
-        // Create new participant
+        // Create new participant tanpa nama (akan diisi saat kirim pesan pertama)
         $participant = Participant::create([
             'event_id' => $event->id,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'joined_at' => now(),
+            'name' => null, // Nama akan diisi saat kirim pesan pertama
+            'phone' => null,
+            'session_id' => $sessionId,
             'is_online' => true,
-            'last_seen' => now()
         ]);
 
         session([
@@ -75,29 +74,44 @@ class EventController extends Controller
             ->with('success', 'Berhasil bergabung ke grup chat!');
     }
 
+    /**
+     * Show event description page
+     */
     public function description(Event $event)
     {
         // Load all necessary relationships
         $event->load([
-            'participants', 
-            'media', 
+            'participants',
+            'media',
             'schedules' => function($query) {
                 $query->orderBy('order')->orderBy('start_time');
             },
             'banks'
         ]);
 
-        // Get images and videos from media - Perbaiki query untuk video
+        // Get images and videos from media
         $images = $event->media()->where('type', 'image')->get();
-        $videos = $event->media()->where('type', 'video')->first(); // Ambil video pertama
+        $videos = $event->media()->where('type', 'video')->get();
         
-        // Debug videos
-        // \Log::info('Videos Query Result: ', $videos ? $videos->toArray() : ['No video found']);
+        // Get first video for main display
+        $mainVideo = $videos->first();
         
         // Get schedules and banks
         $schedules = $event->schedules;
         $banks = $event->banks;
-        
-        return view('event.description', compact('event', 'images', 'videos', 'schedules', 'banks'));
+
+        return view('event.description', compact(
+            'event', 
+            'images', 
+            'videos', 
+            'mainVideo',
+            'schedules', 
+            'banks'
+        ));
+    }
+
+    public function gallery(Event $event){
+        $images = $event->media()->where('type', 'image')->get();
+        return view('event.gallery', compact('event', 'images'));
     }
 }
