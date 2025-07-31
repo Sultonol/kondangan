@@ -14,12 +14,12 @@ class EventSeeder extends Seeder
     {
         // Create sample event
         $event = Event::create([
-            'title' => 'Wedding Celebration - Ahmad & Siti',
+            'title' => 'Hajatan Akhir Tahun',
             'description' => 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.',
-            'groom_name' => 'Ahmad',
-            'bride_name' => 'Siti',
+            'groom_name' => 'Rusydan',
+            'bride_name' => 'Aqilla',
             'event_date' => now()->addDays(30),
-            'location' => 'Gedung Serbaguna Sukahati, Jl. Raya Sukahati No. 123, Cibinong, Bogor',
+            'location' => 'Masjid Jami Al-Utsmani, Jatinegara, Cakung, Jakarta Timur',
             'dress_code_image' => 'events/dress-code.jpg',
             'invitation_code' => 'AHMAD-SITI-2024',
             'is_active' => true
@@ -28,15 +28,15 @@ class EventSeeder extends Seeder
         // Create schedules
         $schedules = [
             [
-                'start_time' => '16:00',
-                'end_time' => '16:30',
+                'start_time' => '14:00',
+                'end_time' => '15:30',
                 'title' => 'Sambutan Orang Tua',
                 'description' => 'Penyambutan dari kedua orang tua mempelai',
                 'color' => '#FF6B6B',
                 'order' => 1
             ],
             [
-                'start_time' => '16:30',
+                'start_time' => '15:30',
                 'end_time' => '18:45',
                 'title' => 'Pembacaan Mantra',
                 'description' => 'Rangkaian doa dan doa dari dua keluarga',
@@ -86,7 +86,7 @@ class EventSeeder extends Seeder
             'event_id' => $event->id,
             'bank_name' => 'BCA',
             'account_number' => '1234567890',
-            'account_holder' => 'Ahmad Siti Wedding',
+            'account_holder' => 'Rusydan',
             'bank_logo' => 'banks/bca-logo.png'
         ]);
 
