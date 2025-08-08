@@ -42,14 +42,14 @@
                 <!-- Action Buttons -->
                 <div class="flex justify-center space-x-3 mb-8">
                     <!-- Video Call -->
-                    <button id="videoCallBtn"
+                    {{-- <button id="videoCallBtn"
                         class="w-12 h-12 bg-pink-400 rounded-lg flex items-center justify-center shadow-sm">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
                             </path>
                         </svg>
-                    </button>
+                    </button> --}}
 
                     <!-- Information -->
                     <button id="informationBtn"
@@ -493,14 +493,50 @@
             // Video Call Modal
             const videoCallBtn = document.getElementById('videoCallBtn');
             const videoCallModal = document.getElementById('videoCallModal');
-            const endVideoCall = document.getElementById('endVideoCall');
             const weddingVideo = document.getElementById('weddingVideo');
+            const endVideoCall = document.getElementById('endVideoCall');
+            const videoCallDuration = document.getElementById('videoCallDuration');
+            const closeVideoModal = document.getElementById('closeVideoModal');
+            const muteVideoBtn = document.getElementById('muteVideoBtn');
+            const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+
+            let videoCallStartTime = null;
+            let videoCallTimer = null;
+            let isVideoMuted = false;
+            let isCameraOff = false;
+
+            function formatCallTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            function startVideoCallTimer() {
+                videoCallStartTime = Date.now();
+                videoCallTimer = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - videoCallStartTime) / 1000);
+                    if (videoCallDuration) {
+                        videoCallDuration.textContent = formatCallTime(elapsed);
+                    }
+                }, 1000);
+            }
+
+            function stopVideoCallTimer() {
+                if (videoCallTimer) {
+                    clearInterval(videoCallTimer);
+                    videoCallTimer = null;
+                }
+                if (videoCallDuration) {
+                    videoCallDuration.textContent = '00:00';
+                }
+            }
 
             if (videoCallBtn) {
                 videoCallBtn.addEventListener('click', function() {
                     videoCallModal.classList.remove('hidden');
+                    startVideoCallTimer();
                     if (weddingVideo) {
-                        weddingVideo.play();
+                        weddingVideo.play().catch(e => console.error("Video playback failed:", e));
                     }
                 });
             }
@@ -512,6 +548,29 @@
                         weddingVideo.pause();
                         weddingVideo.currentTime = 0;
                     }
+                    stopVideoCallTimer();
+                });
+            }
+            if (closeVideoModal) {
+                closeVideoModal.addEventListener('click', function() {
+                    if (endVideoCall) endVideoCall.click();
+                });
+            }
+
+            if (muteVideoBtn && weddingVideo) {
+                muteVideoBtn.addEventListener('click', function() {
+                    isVideoMuted = !isVideoMuted;
+                    weddingVideo.muted = isVideoMuted;
+                    document.getElementById('micOnIcon').classList.toggle('hidden', isVideoMuted);
+                    document.getElementById('micOffIcon').classList.toggle('hidden', !isVideoMuted);
+                });
+            }
+
+            if (cameraToggleBtn) {
+                cameraToggleBtn.addEventListener('click', function() {
+                    isCameraOff = !isCameraOff;
+                    document.getElementById('cameraOnIcon').classList.toggle('hidden', isCameraOff);
+                    document.getElementById('cameraOffIcon').classList.toggle('hidden', !isCameraOff);
                 });
             }
 
@@ -546,48 +605,75 @@
                 }
             });
 
-            // Account number blur/unblur functionality
-            document.querySelectorAll('.account-number, .account-number-visible').forEach(accountEl => {
-                accountEl.addEventListener('click', function() {
-                    const container = this.closest('.space-y-2') || this.closest(
-                        '.bg-gradient-to-br');
-                    const accountNumber = container.querySelector('.account-number');
-                    const accountNumberVisible = container.querySelector('.account-number-visible');
 
-                    if (accountNumber && accountNumberVisible) {
-                        if (accountNumber.classList.contains('blur-sm')) {
-                            accountNumber.classList.add('hidden');
-                            accountNumber.classList.remove('blur-sm');
-                            accountNumberVisible.classList.remove('hidden');
+            // Copy functionality for account numbers
+            document.querySelectorAll('.copy-account-btn').forEach(btn => {
+                btn.addEventListener('click', function(event) {
+                    event
+                .stopPropagation(); // Prevent modal from closing if copy button is inside a clickable element
+                    const accountNumberElement = this.closest('.relative').querySelector(
+                        '.account-number');
+                    if (accountNumberElement) {
+                        const accountNumber = accountNumberElement.getAttribute(
+                            'data-account-number');
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(accountNumber)
+                                .then(() => {
+                                    showToast('Nomor rekening berhasil disalin!');
+                                })
+                                .catch(err => {
+                                    console.error('Failed to copy text: ', err);
+                                    showToast('Gagal menyalin nomor rekening.', 'error');
+                                });
                         } else {
-                            accountNumber.classList.remove('hidden');
-                            accountNumber.classList.add('blur-sm');
-                            accountNumberVisible.classList.add('hidden');
+                            // Fallback for older browsers
+                            const tempInput = document.createElement('input');
+                            tempInput.value = accountNumber;
+                            document.body.appendChild(tempInput);
+                            tempInput.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(tempInput);
+                            showToast('Nomor rekening berhasil disalin! (Fallback)');
                         }
                     }
                 });
             });
 
-            // Copy functionality
+            // Copy button for the SVG card
             document.querySelectorAll('.copy-full-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const bank = this.dataset.bank;
-                    const account = this.dataset.account;
-                    const holder = this.dataset.holder;
-                    const fullInfo =
-                        `Bank: ${bank}\nAccount Number: ${account}\nAccount Holder: ${holder}`;
-
-                    navigator.clipboard.writeText(fullInfo).then(() => {
-                        showToast('Account info copied!');
-                    });
+                    const container = this.closest('.rounded-2xl');
+                    // DUMMY ACCOUNT NUMBER - SILAKAN UBAH INI
+                    const accountNumber = '1234567890123456789';
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(accountNumber)
+                            .then(() => {
+                                showToast('Nomor rekening berhasil disalin!');
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy text: ', err);
+                                showToast('Gagal menyalin nomor rekening.', 'error');
+                            });
+                    } else {
+                        // Fallback for older browsers
+                        const tempInput = document.createElement('input');
+                        tempInput.value = accountNumber;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        showToast('Nomor rekening berhasil disalin! (Fallback)');
+                    }
                 });
             });
 
+
             // Toast notification function
-            function showToast(message) {
+            function showToast(message, type = 'success') {
                 const toast = document.createElement('div');
+                let bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
                 toast.className =
-                    'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+                    `fixed top-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
                 toast.textContent = message;
                 document.body.appendChild(toast);
                 setTimeout(() => {
