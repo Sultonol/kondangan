@@ -610,7 +610,7 @@
             document.querySelectorAll('.copy-account-btn').forEach(btn => {
                 btn.addEventListener('click', function(event) {
                     event
-                .stopPropagation(); // Prevent modal from closing if copy button is inside a clickable element
+                        .stopPropagation(); // Prevent modal from closing if copy button is inside a clickable element
                     const accountNumberElement = this.closest('.relative').querySelector(
                         '.account-number');
                     if (accountNumberElement) {
