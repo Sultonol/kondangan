@@ -5,15 +5,14 @@
 @section('content')
     <div class="flex h-screen relative overflow-hidden">
         <div class="absolute inset-0">
-            <img src="/storage/events/images/walpaper.jpeg" alt="Chat Background" class="w-full h-full object-cover opacity-30"
+            <img src="/storage/events/images/bg-depan.jpeg" alt="Chat Background" class="w-full h-full object-cover opacity-30"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <div class="hidden w-full h-full opacity-10"
                 style="background: linear-gradient(135deg, #F8EAD0 0%, #F5E6C8 50%, #F2E2C0 100%); background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><pattern id=%22traditional%22 x=%220%22 y=%220%22 width=%2220%22 height=%2220%22 patternUnits=%22userSpaceOnUse%22><circle cx=%2210%22 cy=%2210%22 r=%222%22 fill=%22%238B7355%22 opacity=%220.1%22/><path d=%22M5,5 Q10,2 15,5 Q18,10 15,15 Q10,18 5,15 Q2,10 5,5%22 fill=%22none%22 stroke=%22%238B7355%22 stroke-width=%220.3%22 opacity=%220.1%22/></pattern></defs><rect width=%22100%22 height=%22100%22 fill=%22url(%23traditional)%22/></svg>'); background-size: 60px 60px;">
             </div>
         </div>
 
-        {{-- Background Music - ENHANCED AUTO PLAY --}}
-        <audio id="backgroundMusic" loop preload="auto" style="display: none;">
+        <audio id="backgroundMusic" loop preload="auto" autoplay style="display: none;">
             <source src="/storage/events/videos/nadhif.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
@@ -29,13 +28,13 @@
                     </path>
                 </svg>
                 <div id="musicIndicator"
-                    class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse border-2 border-white">
+                    class="absolute -top-1 -right-1 w-4 h-4 bg-gray-500 rounded-full animate-pulse border-2 border-white">
                 </div>
             </button>
         </div>
 
         <div class="flex-1 flex flex-col relative z-10">
-            <div class="bg-[#F8EAD0]/95 backdrop-blur-sm border-b border-[#E8D5B7] shadow-sm">
+            <div class="bg-[#A27B5C]/70 backdrop-blur-sm border-b border-[#E8D5B7] shadow-sm">
                 <div class="px-4 py-3 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <button onclick="window.location.href='{{ route('join.form') }}'"
@@ -47,7 +46,7 @@
                         </button>
                         <div class="relative">
                             <div
-                                class="w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-[#D4B896] via-[#C9A876] to-[#B8956A] flex-shrink-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-white">
+                                class="w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-[#D4B896] via-[#C9A876] to-[#B8956A] flex-shrink-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-gray-50">
                                 <img src="/storage/events/images/logo.png" alt="Logo" class="w-full h-full object-cover"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div
@@ -62,15 +61,14 @@
                                 class="absolute inset-0 w-16 h-16 rounded-xl bg-gradient-to-br from-[#B8956A] to-[#A0845C] -z-10 transform translate-x-1 translate-y-1 opacity-30">
                             </div>
                         </div>
-                        <div class="cursor-pointer hover:bg-[#F2E2C0] rounded-lg px-2 py-1 transition-colors"
+                        <div class="cursor-pointer rounded-lg px-2 py-1 transition-colors"
                             onclick="window.location.href='{{ route('event.description', $event->id) }}'">
-                            <h1 class="font-semibold text-[#8B7355] text-sm md:text-base">{{ $event->title }}</h1>
-                            <p class="text-xs text-[#A0845C] font-medium">Aqilla & Rusydan</p>
-                            <p class="text-xs text-[#B8956A] hidden md:block">
+                            <h1 class="font-semibold text-white text-sm md:text-base">{{ $event->title }}</h1>
+                            <p class="text-xs text-white font-medium">Aqilla & Rusydan</p>
+                            <p class="text-xs text-white hidden md:block">
                                 {{ $event->event_date->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</p>
                         </div>
-                        <button id="videoCallBtn"
-                            class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors ml-2">
+                        <button id="videoCallBtn" class="p-2 text-white hover:bg-gray-50 rounded-lg transition-colors ml-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
@@ -78,13 +76,16 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="flex items-center space-x-2">
+                    <div class="hidden flex items-center space-x-2">
                         <div id="realtimeStatus"
                             class="hidden items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium">
                             <div class="w-2 h-2 rounded-full"></div>
                             <span></span>
                         </div>
-                        {{-- WIB CLOCK REMOVED --}}
+                        <div id="wibClock"
+                            class="hidden text-xs text-[#8B7355] font-medium px-2 py-1 bg-white/50 rounded-lg">
+                            <span id="currentTime">--:--</span> WIB
+                        </div>
                         <button id="menuBtn" class="p-2 text-[#8B7355] hover:bg-[#F2E2C0] rounded-lg transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -101,8 +102,6 @@
                     @foreach ($messages as $message)
                         @php
                             $isMyMessage = $currentParticipant && $message->participant_id == $currentParticipant->id;
-                            // PERBAIKAN: Pastikan timezone WIB untuk display
-                            $messageTime = $message->created_at->setTimezone('Asia/Jakarta');
                         @endphp
                         <div class="flex {{ $isMyMessage ? 'justify-end' : 'justify-start' }} message-item mb-4"
                             data-message-id="{{ $message->id }}">
@@ -119,11 +118,12 @@
                                     class="flex items-center space-x-2 mb-1 {{ $isMyMessage ? 'flex-row-reverse space-x-reverse' : '' }}">
                                     <span
                                         class="font-medium text-[#8B7355] text-sm">{{ $message->sender_name ?? ($message->participant?->name ?? 'Unknown') }}</span>
-                                    <span class="text-xs text-[#A0845C]">{{ $messageTime->format('H:i') }} WIB</span>
+                                    <span class="text-xs text-[#A0845C]">{{ $message->created_at->format('H:i') }}
+                                        WIB</span>
                                 </div>
                                 <div
                                     class="rounded-2xl shadow-sm border max-w-full break-words {{ $isMyMessage
-                                        ? 'bg-green-500 text-white border-green-400 rounded-br-md'
+                                        ? 'bg-gray-500 text-white border-gray-400 rounded-br-md'
                                         : 'bg-white text-gray-800 border-gray-200 rounded-bl-md' }}">
                                     @if ($message->isImageAttachment())
                                         <div
@@ -239,7 +239,7 @@
                                                     @endif
                                                     <button
                                                         onclick="shareLocation('{{ $locationData['name'] ?? 'Shared Location' }}', '{{ $locationData['lat'] ?? '' }}', '{{ $locationData['lng'] ?? '' }}')"
-                                                        class="w-full px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
+                                                        class="w-full px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -251,7 +251,7 @@
                                                     </button>
                                                     <button
                                                         onclick="getDirections('{{ $locationData['lat'] ?? -6.2019928 }}', '{{ $locationData['lng'] ?? 106.925792 }}')"
-                                                        class="w-full px-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
+                                                        class="w-full px-3 py-2 bg-stone-500 hover:bg-stone-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -274,7 +274,7 @@
                             </div>
                             @if ($isMyMessage)
                                 <div
-                                    class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
+                                    class="w-8 h-8 bg-gradient-to-br from-gray-400 to-stone-500 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
                                     <span
                                         class="text-white font-medium text-xs">{{ substr($message->sender_name ?? ($message->participant?->name ?? 'U'), 0, 1) }}</span>
                                 </div>
@@ -286,7 +286,7 @@
 
             <div class="relative p-4">
                 <div class="absolute inset-0">
-                    <img src="/storage/events/images/walpaper.jpeg" alt="Input Background"
+                    <img src="/storage/events/images/bg-depan.jpeg" alt="Input Background"
                         class="w-full h-full object-cover opacity-30"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="hidden w-full h-full bg-gradient-to-t from-[#F8EAD0] to-[#F5E6C8] opacity-80"></div>
@@ -368,7 +368,7 @@
                                 placeholder="Type a message...">
                         </div>
                         <button type="submit"
-                            class="px-4 py-2 bg-gradient-to-r from-[#C9A876] to-[#B8956A] hover:from-[#B8956A] hover:to-[#A0845C] text-white rounded-2xl transition-all duration-300 flex items-center space-x-1 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            class="px-4 py-2 bg-gradient-to-r from-[#A27B5C] to-[#B8956A] hover:from-[#B8956A] hover:to-[#A0845C] text-white rounded-2xl transition-all duration-300 flex items-center space-x-1 shadow-lg hover:shadow-xl transform hover:scale-105">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
@@ -457,7 +457,7 @@
         </div>
     </div>
 
-    {{-- ENHANCED Video Call Modal with Draggable User Camera --}}
+    {{-- Video Call Modal and Menu Modal remain the same --}}
     <div id="videoCallModal"
         class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center p-4">
         <div class="relative w-full video-call-modal-container flex flex-col bg-[#202c33] rounded-xl shadow-2xl">
@@ -493,19 +493,17 @@
                             d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
                     </svg>
                 </button>
-
-                <div id="myCameraContainer"
-                    class="draggable-camera z-10 w-24 h-32 md:w-28 md:h-36 rounded-lg overflow-hidden shadow-xl border-2 border-white/40">
+                <div
+                    class="absolute bottom-4 right-4 z-10 w-[120px] h-[160px] rounded-lg overflow-hidden shadow-xl border-2 border-white/40">
                     <video id="myVideoFeed" class="w-full h-full object-cover hidden" autoplay playsinline muted></video>
                     <div id="myVideoPlaceholder"
                         class="w-full h-full flex items-center justify-center bg-[#3a454d] text-white/50">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                         </svg>
                     </div>
                 </div>
-
                 <div class="absolute top-0 left-0 right-0 z-20 p-4 text-center pointer-events-none">
                     <div class="w-20 h-20 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
                         <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
@@ -518,15 +516,12 @@
                     <p id="videoCallDuration" class="mt-2 text-white/80 hidden">00:00</p>
                 </div>
             </div>
-
-            {{-- FIXED: Control buttons positioned to be always visible --}}
-            <div
-                class="absolute bottom-0 left-0 right-0 z-30 p-4 flex justify-center space-x-6 bg-gradient-to-t from-black/50 to-transparent">
+            <div class="absolute bottom-0 left-0 right-0 z-20 p-4 flex justify-center space-x-6">
                 <button id="muteVideoBtn" class="video-control-btn text-white bg-white/20 hover:bg-white/30"
                     title="Mute Mic">
                     <svg id="micOnIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                         <path
-                            d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3zm5.49-3.41c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36C15.53 11.45 15 12 15 12V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59a.75.75 0 00-1.5 0v3.59c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6c0-.83-.67-1.5-1.5-1.5S7.5 5.17 7.5 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36z">
+                            d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3zm5.49-3.41c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36C15.53 11.45 15 12 15 12V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59a.75.75 0 00-1.5 0v3.59c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6c0-.83-.67-1.5 1.5-1.5S13.5 5.17 13.5 6v6c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6c0-.83-.67-1.5-1.5-1.5S7.5 5.17 7.5 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36z">
                         </path>
                         <path
                             d="M12 19c-2.76 0-5-2.24-5-5h-1c0 3.04 2.4 5.57 5.5 5.96V21h1v-2.04c3.1-.39 5.5-2.92 5.5-5.96h-1c0 2.76-2.24 5-5 5z">
@@ -534,7 +529,7 @@
                     </svg>
                     <svg id="micOffIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
                         <path
-                            d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3zm5.49-3.41c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36C15.53 11.45 15 12 15 12V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59a.75.75 0 00-1.5 0v3.59c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6c0-.83-.67-1.5-1.5-1.5S7.5 5.17 7.5 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36z">
+                            d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3zm5.49-3.41c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36C15.53 11.45 15 12 15 12V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59a.75.75 0 00-1.5 0v3.59c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6c0-.83-.67-1.5 1.5-1.5S13.5 5.17 13.5 6v6c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6c0-.83-.67-1.5-1.5-1.5S7.5 5.17 7.5 6v6c0 1.66 1.34 3 3 3a3 3 0 003-3v-3.59c.23-.42.06-.95-.36-1.18a.75.75 0 00-1.18.36z">
                         </path>
                         <path
                             d="M12 19c-2.76 0-5-2.24-5-5h-1c0 3.04 2.4 5.57 5.5 5.96V21h1v-2.04c3.1-.39 5.5-2.92 5.5-5.96h-1c0 2.76-2.24 5-5 5z">
@@ -545,10 +540,10 @@
                 <button id="endVideoCall" class="video-control-btn bg-red-500 hover:bg-red-600 text-white"
                     title="End Call">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 9c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
-                        </path>
-                        <path d="M19 13h-2v2h2v-2zm0-4h-2v2h2V9z"></path>
+                        <path d="M13.5 10.5h-3a.75.75 0 000 1.5h3a.75.75 0 000-1.5z"></path>
+                        <path d="M18.75 5.25a.75.75 0 010-1.5h-13.5a.75.75 0 010 1.5h13.5z"></path>
+                        <path d="M18.75 18.75a.75.75 0 010-1.5h-13.5a.75.75 0 010 1.5h13.5z"></path>
+                        <path d="M18.75 14.25a.75.75 0 010-1.5h-13.5a.75.75 0 010 1.5h13.5z"></path>
                     </svg>
                 </button>
                 <button id="cameraToggleBtn" class="video-control-btn text-white bg-white/20 hover:bg-white/30"
@@ -634,35 +629,56 @@
         let realtimeConnection = null;
         let isRealtimeConnected = false;
         let receivedMessageIds = new Set();
-        let isVideoCallActive = false;
-        let musicWasPlayingBeforeCall = false;
-        let autoPlayAttempted = false;
 
         // Current participant info from server
         const currentParticipant = @json($currentParticipant);
         const eventId = {{ $event->id }};
 
+        // WIB Clock function
+        function updateWIBClock() {
+            const now = new Date();
+            const wibTime = new Date(now.getTime() + (7 * 60 * 60 * 1000)); // UTC + 7 hours
+            const timeString = wibTime.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Jakarta'
+            });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
         // Initialize Realtime Connection with Reverb
         function initializeRealtime() {
             console.log('🔄 Initializing Reverb realtime connection...');
+
             try {
+                // Initialize Echo with Reverb
                 window.Echo.channel(`chat.${eventId}`)
                     .listen('.message.sent', (data) => {
                         console.log('📨 Received realtime message:', data);
+
+                        // Prevent duplicate messages
                         if (receivedMessageIds.has(data.id)) {
                             console.log('⚠️ Duplicate message ignored:', data.id);
                             return;
                         }
+
                         receivedMessageIds.add(data.id);
+
+                        // Don't show our own messages (they're already added locally)
                         if (currentParticipant && data.participant.id === currentParticipant.id) {
                             console.log('⚠️ Own message ignored');
                             return;
                         }
+
+                        // Add message to chat
                         addRealtimeMessageToChat(data);
+
+                        // Show notification
                         showNotification(`💬 ${data.participant.name}: ${data.message || 'Sent an attachment'}`, 'info',
                             3000);
                     });
 
+                // Connection status listeners
                 window.Echo.connector.pusher.connection.bind('connected', () => {
                     console.log('✅ Reverb connected');
                     isRealtimeConnected = true;
@@ -690,17 +706,20 @@
             }
         }
 
+        // Update realtime status indicator
         function updateRealtimeStatus(status) {
             const statusElement = document.getElementById('realtimeStatus');
             const dot = statusElement.querySelector('.w-2');
             const text = statusElement.querySelector('span');
+
             statusElement.classList.remove('hidden');
             statusElement.classList.add('flex');
+
             switch (status) {
                 case 'connected':
                     statusElement.className =
                         'flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800';
-                    dot.className = 'w-2 h-2 rounded-full bg-green-500 animate-pulse';
+                    dot.className = 'w-2 h-2 rounded-full bg-[#7A7A73] animate-pulse';
                     text.textContent = 'Live';
                     break;
                 case 'disconnected':
@@ -718,16 +737,22 @@
             }
         }
 
+        // Add realtime message to chat
         function addRealtimeMessageToChat(messageData) {
+            // Check if message already exists
             const existingMessage = document.querySelector(`[data-message-id="${messageData.id}"]`);
             if (existingMessage) {
                 console.log('⚠️ Message already exists in DOM:', messageData.id);
                 return;
             }
+
             const messageDiv = document.createElement('div');
             messageDiv.className = 'flex justify-start message-item mb-4';
             messageDiv.setAttribute('data-message-id', messageData.id);
+
             let attachmentHtml = '';
+
+            // Handle image attachment
             if (messageData.attachment_type === 'image') {
                 attachmentHtml = `
                     <div class="rounded-t-2xl overflow-hidden rounded-tl-2xl">
@@ -737,15 +762,19 @@
                     </div>
                 `;
             }
+
+            // Handle location attachment
             if (messageData.attachment_type === 'location' && messageData.location_data) {
                 const locationData = messageData.location_data;
                 const isWeddingVenue = locationData.is_wedding_venue || false;
                 const locationName = locationData.name || 'Shared Location';
                 const locationLatVal = locationData.lat || '';
                 const locationLngVal = locationData.lng || '';
+
                 const mapUrl = isWeddingVenue ?
-                    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.192079040854!2d106.92321707503716!3d-6.201992893774889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698cd0b04c8f2b%3A0x673c6a4d7d3c5f4!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1753913917430!5m2!1sen!2sid' :
+                    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.75037923707!2d106.925792!3d-6.2019928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698bb9d68516d3%3A0x867c293c6f932f91!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1689658253106!5m2!1sen!2sid' :
                     `https://maps.google.com/maps?q=${locationLatVal},${locationLngVal}&z=15&output=embed`;
+
                 attachmentHtml = `
                     <div class="rounded-t-2xl overflow-hidden rounded-tl-2xl">
                         <div class="bg-white p-3 border-b border-gray-100 location-bubble">
@@ -768,12 +797,12 @@
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1">
                                         ${isWeddingVenue ? `
-                                                    <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
-                                                    <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
-                                                ` : `
-                                                    <p class="text-sm font-medium text-gray-800">${locationName}</p>
-                                                    <p class="text-xs text-gray-600">Shared current location</p>
-                                                `}
+                                                <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
+                                                <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
+                                            ` : `
+                                                <p class="text-sm font-medium text-gray-800">${locationName}</p>
+                                                <p class="text-xs text-gray-600">Shared current location</p>
+                                            `}
                                         <p class="text-xs text-gray-500 mt-1">${locationLatVal}, ${locationLngVal}</p>
                                     </div>
                                     <div class="text-right">
@@ -784,7 +813,7 @@
                                 </div>
                             </div>
                             <div class="space-y-2">
-                                <button onclick="window.open('${isWeddingVenue ? 'https://www.google.com/maps/dir/?api=1&destination=-6.2019928,106.925792' : `https://maps.google.com/maps?q=${locationLatVal},${locationLngVal}`}', '_blank')" class="w-full px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
+                                <button onclick="window.open('${isWeddingVenue ? 'https://maps.google.com/?q=-6.2019928,106.925792' : `https://maps.google.com/?q=${locationLatVal},${locationLngVal}`}', '_blank')" class="w-full px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                                     </svg>
@@ -807,33 +836,28 @@
                     </div>
                 `;
             }
+
             messageDiv.innerHTML = `
-                ${!isMyMessage ? `
-                            <div class="w-8 h-8 bg-gradient-to-br from-[#C9A876] to-[#B8956A] rounded-full flex items-center justify-center flex-shrink-0 mr-3 shadow-sm">
-                                <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
-                            </div>
-                            ` : ''}
-                                <div class="flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-xs md:max-w-md">
-                    <div class="flex items-center space-x-2 mb-1 ${isMyMessage ? 'flex-row-reverse space-x-reverse' : ''}">
-                        <span class="font-medium text-[#8B7355] text-sm">${message.sender_name}</span>
-                        <span class="text-xs text-[#A0845C]">${message.created_at} WIB</span>
+                <div class="w-8 h-8 bg-gradient-to-br from-[#C9A876] to-[#B8956A] rounded-full flex items-center justify-center flex-shrink-0 mr-3 shadow-sm">
+                    <span class="text-white font-medium text-xs">${messageData.participant.name.charAt(0)}</span>
+                </div>
+                <div class="flex flex-col items-start max-w-xs md:max-w-md">
+                    <div class="flex items-center space-x-2 mb-1">
+                        <span class="font-medium text-[#8B7355] text-sm">${messageData.participant.name}</span>
+                        <span class="text-xs text-[#A0845C]">${messageData.created_at} WIB</span>
                     </div>
-                    <div class="rounded-2xl shadow-sm border max-w-full break-words ${isMyMessage
-                        ? 'bg-green-500 text-white border-green-400 rounded-br-md'
-                        : 'bg-white text-gray-800 border-gray-200 rounded-bl-md'}">
+                    <div class="rounded-2xl shadow-sm border max-w-full break-words bg-white text-gray-800 border-gray-200 rounded-bl-md">
                         ${attachmentHtml}
-                        ${message.message ? `<div class="p-3 ${attachmentHtml ? 'pt-2' : ''}"><p class="text-sm leading-relaxed">${message.message}</p></div>` : ''}
+                        ${messageData.message ? `<div class="p-3 ${attachmentHtml ? 'pt-2' : ''}"><p class="text-sm leading-relaxed">${messageData.message}</p></div>` : ''}
                     </div>
                 </div>
-                ${isMyMessage ? `
-                            <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
-                                <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
-                            </div>
-                            ` : ''}
             `;
+
             const messagesDiv = document.querySelector('#messagesContainer .relative.z-10');
             messagesDiv.appendChild(messageDiv);
             scrollToBottom();
+
+            // Add animation
             messageDiv.style.opacity = '0';
             messageDiv.style.transform = 'translateY(20px)';
             setTimeout(() => {
@@ -843,112 +867,80 @@
             }, 100);
         }
 
-        // --- ENHANCED AUDIO PLAYER FUNCTIONS ---
+        // Audio Player functions (keeping existing code)
         function initAudioPlayer() {
-            console.log('🎵 Initializing audio player with aggressive auto-play...');
+            console.log('🎵 Initializing audio player with auto-play...');
             backgroundMusic = document.getElementById('backgroundMusic');
             if (!backgroundMusic) {
                 console.error('Background music element not found');
                 return;
             }
+
             backgroundMusic.volume = 0.25;
+
             backgroundMusic.addEventListener('canplaythrough', function() {
+                console.log('🎵 Audio can play through');
                 isMusicReady = true;
-                if (!autoPlayAttempted) {
-                    attemptAutoPlay();
-                }
+                attemptAutoPlay();
             });
+
             backgroundMusic.addEventListener('loadeddata', function() {
+                console.log('🎵 Audio data loaded');
                 isMusicReady = true;
-                if (!autoPlayAttempted) {
-                    attemptAutoPlay();
-                }
+                attemptAutoPlay();
             });
+
             backgroundMusic.addEventListener('play', function() {
+                console.log('🎵 Audio started playing');
                 updateSpeakerIcon(false);
                 updateMusicIndicator(true);
                 isMusicMuted = false;
                 showNotification('🎵 "Bergema Sampai Selamanya" is now playing softly in the background', 'success',
                     4000);
             });
+
             backgroundMusic.addEventListener('pause', function() {
+                console.log('🎵 Audio paused');
                 updateSpeakerIcon(true);
                 updateMusicIndicator(false);
                 isMusicMuted = true;
             });
+
             backgroundMusic.addEventListener('error', function(e) {
                 console.error('🎵 Audio error:', e);
                 showNotification('Background music failed to load', 'warning', 3000);
                 updateMusicIndicator(false);
             });
+
             backgroundMusic.load();
-            setTimeout(() => {
-                if (!autoPlayAttempted) {
-                    attemptAutoPlay();
-                }
-            }, 500);
-            setTimeout(() => {
-                if (!autoPlayAttempted && backgroundMusic.paused) {
-                    attemptAutoPlay();
-                }
-            }, 1000);
-            setTimeout(() => {
-                if (!autoPlayAttempted && backgroundMusic.paused) {
-                    attemptAutoPlay();
-                }
-            }, 2000);
-            console.log('🎵 Audio player initialized with multiple auto-play attempts...');
+            console.log('🎵 Audio player initialized, attempting auto-play...');
         }
 
         function attemptAutoPlay() {
-            if (!backgroundMusic || !isMusicReady || autoPlayAttempted) {
+            if (!backgroundMusic || !isMusicReady) {
+                console.log('🎵 Not ready for auto-play yet');
                 return;
             }
-            autoPlayAttempted = true;
-            console.log('🎵 Attempting aggressive auto-play...');
+
+            console.log('🎵 Attempting auto-play...');
             const playPromise = backgroundMusic.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
-                    isMusicMuted = false;
+                    console.log('🎵 Auto-play successful!');
                 }).catch(error => {
-                    setTimeout(() => {
-                        tryUserInteractionPlay();
-                    }, 100);
+                    console.log('🎵 Auto-play blocked by browser:', error.message);
+                    showNotification('🎵 Click the speaker button to enable background music', 'info', 5000);
+                    updateSpeakerIcon(true);
+                    updateMusicIndicator(false);
                 });
             }
-        }
-
-        function tryUserInteractionPlay() {
-            const playButton = document.createElement('button');
-            playButton.style.position = 'fixed';
-            playButton.style.top = '-1000px';
-            playButton.style.left = '-1000px';
-            playButton.style.opacity = '0';
-            playButton.style.pointerEvents = 'none';
-            playButton.addEventListener('click', function() {
-                const playPromise = backgroundMusic.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        isMusicMuted = false;
-                        document.body.removeChild(playButton);
-                    }).catch(error => {
-                        showNotification('🎵 Click the speaker button to enable background music', 'info',
-                            5000);
-                        updateSpeakerIcon(true);
-                        updateMusicIndicator(false);
-                        isMusicMuted = true;
-                        document.body.removeChild(playButton);
-                    });
-                }
-            });
-            document.body.appendChild(playButton);
-            playButton.click();
         }
 
         function updateSpeakerIcon(muted) {
             const speakerIcon = document.getElementById('speakerIcon');
             const speakerBtn = document.getElementById('speakerBtn');
             if (!speakerIcon || !speakerBtn) return;
+
             if (muted) {
                 speakerIcon.innerHTML = `
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
@@ -970,6 +962,7 @@
         function updateMusicIndicator(playing) {
             const indicator = document.getElementById('musicIndicator');
             if (!indicator) return;
+
             if (playing) {
                 indicator.classList.remove('hidden');
             } else {
@@ -978,62 +971,48 @@
         }
 
         function toggleMusic() {
+            console.log('🎵 Toggle music clicked');
             if (!backgroundMusic) {
+                console.error('Background music element not found');
                 showNotification('Music player not available', 'error');
                 return;
             }
+
             try {
                 if (backgroundMusic.paused) {
                     const playPromise = backgroundMusic.play();
                     if (playPromise !== undefined) {
                         playPromise.then(() => {
                             showNotification('🎵 Background music enabled', 'success', 2000);
+                            console.log('🎵 Music enabled');
                         }).catch(error => {
+                            console.error('Error playing music:', error);
                             showNotification('Failed to play music', 'error');
                         });
                     }
                 } else {
                     backgroundMusic.pause();
                     showNotification('🔇 Background music disabled', 'info', 2000);
+                    console.log('🎵 Music disabled');
                 }
             } catch (error) {
+                console.error('Error toggling music:', error);
                 showNotification('Error controlling music', 'error');
             }
         }
 
-        function pauseMusicForVideoCall() {
-            if (!backgroundMusic) return;
-            if (!backgroundMusic.paused) {
-                musicWasPlayingBeforeCall = true;
-                backgroundMusic.pause();
-                showNotification('🔇 Background music paused for video call', 'info', 2000);
-            } else {
-                musicWasPlayingBeforeCall = false;
-            }
-        }
-
-        function resumeMusicAfterVideoCall() {
-            if (!backgroundMusic) return;
-            if (musicWasPlayingBeforeCall && backgroundMusic.paused) {
-                const playPromise = backgroundMusic.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        showNotification('🎵 Background music resumed', 'success', 2000);
-                    }).catch(error => {
-                        console.error('Error resuming music:', error);
-                    });
-                }
-            }
-        }
-
+        // Enhanced notification function
         function showNotification(message, type = 'info', duration = 4000) {
             const container = document.getElementById('notificationContainer');
             if (!container) return;
+
             const notification = document.createElement('div');
             notification.className =
                 `notification-item ${type === 'success' && message.includes('🎵') ? 'notification-music' : ''}`;
+
             const notificationId = 'notification-' + Date.now();
             notification.id = notificationId;
+
             notification.innerHTML = `
                 <div class="notification-content">
                     <div class="notification-text">
@@ -1049,15 +1028,19 @@
                     </button>
                 </div>
             `;
+
             container.appendChild(notification);
+
             setTimeout(() => {
                 notification.classList.add('show');
             }, 100);
+
             if (duration > 0) {
                 setTimeout(() => {
                     closeNotification(notificationId);
                 }, duration);
             }
+
             const maxNotifications = window.innerWidth <= 768 ? 3 : 5;
             const notifications = container.querySelectorAll('.notification-item');
             if (notifications.length > maxNotifications) {
@@ -1083,7 +1066,7 @@
             const icons = {
                 success: `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#22c55e"/>
-                </svg>`,
+                  </svg>`,
                 error: `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#ef4444"/>
                  </svg>`,
@@ -1091,27 +1074,42 @@
                     <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" stroke="#f59e0b"/>
                   </svg>`,
                 info: `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#3b82f6"/>           </svg>`
+                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#3b82f6"/>              </svg>`
             };
             return icons[type] || icons.info;
         }
 
+        // Auto scroll to bottom
         function scrollToBottom() {
             const messagesContainer = document.getElementById('messagesContainer');
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
+        // Get current time in WIB
+        function getCurrentTimeWIB() {
+            const now = new Date();
+            const wibTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+            return wibTime.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Jakarta'
+            });
+        }
+
+        // Add message to chat (for local messages)
         function addMessageToChat(message, isMyMessage = false) {
+            // Add to received messages to prevent duplicates
             receivedMessageIds.add(message.id);
+
             const messageDiv = document.createElement('div');
             messageDiv.className = `flex ${isMyMessage ? 'justify-end' : 'justify-start'} message-item mb-4`;
             messageDiv.setAttribute('data-message-id', message.id);
-            const currentTime = message.created_at || new Date().toLocaleTimeString('id-ID', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            }) + ' WIB';
+
+            const currentTime = getCurrentTimeWIB();
+
             let attachmentHtml = '';
+
+            // Image attachment
             if (message.attachment_type === 'image') {
                 attachmentHtml = `
                     <div class="rounded-t-2xl overflow-hidden ${isMyMessage ? 'rounded-tr-2xl' : 'rounded-tl-2xl'}">
@@ -1122,14 +1120,18 @@
                     </div>
                 `;
             }
+
+            // Location attachment
             if (message.attachment_type === 'location' && message.location_data) {
                 const isWeddingVenue = message.location_data.is_wedding_venue || false;
                 const locationName = message.location_data.name || 'Shared Location';
                 const locationLatVal = message.location_data.lat || '';
                 const locationLngVal = message.location_data.lng || '';
+
                 const mapUrl = isWeddingVenue ?
-                    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.192079040854!2d106.92321707503716!3d-6.201992893774889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698cd0b04c8f2b%3A0x673c6a4d7d3c5f4!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1753913917430!5m2!1sen!2sid' :
+                    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.75037923707!2d106.925792!3d-6.2019928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698bb9d68516d3%3A0x867c293c6f932f91!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1689658253106!5m2!1sen!2sid' :
                     `https://maps.google.com/maps?q=${locationLatVal},${locationLngVal}&z=15&output=embed`;
+
                 attachmentHtml = `
                     <div class="rounded-t-2xl overflow-hidden ${isMyMessage ? 'rounded-tr-2xl' : 'rounded-tl-2xl'}">
                         <div class="bg-white p-3 border-b border-gray-100 location-bubble">
@@ -1161,12 +1163,12 @@
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1">
                                         ${isWeddingVenue ? `
-                                                    <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
-                                                    <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
-                                                    ` : `
-                                                    <p class="text-sm font-medium text-gray-800">${locationName}</p>
-                                                    <p class="text-xs text-gray-600">Shared current location</p>
-                                                    `}
+                                                <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
+                                                <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
+                                                ` : `
+                                                <p class="text-sm font-medium text-gray-800">${locationName}</p>
+                                                <p class="text-xs text-gray-600">Shared current location</p>
+                                                `}
                                         <p class="text-xs text-gray-500 mt-1">${locationLatVal}, ${locationLngVal}</p>
                                     </div>
                                     <div class="text-right">
@@ -1177,7 +1179,7 @@
                                 </div>
                             </div>
                             <div class="space-y-2">
-                                <button onclick="window.open('${isWeddingVenue ? 'https://www.google.com/maps/dir/?api=1&destination=-6.2019928,106.925792' : `https://maps.google.com/maps?q=${locationLatVal},${locationLngVal}`}', '_blank')"
+                                <button onclick="window.open('${isWeddingVenue ? 'https://maps.google.com/?q=-6.2019928,106.925792' : `https://maps.google.com/?q=${locationLatVal},${locationLngVal}`}', '_blank')"
                                         class="w-full px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -1203,13 +1205,14 @@
                     </div>
                 `;
             }
+
             messageDiv.innerHTML = `
                 ${!isMyMessage ? `
-                            <div class="w-8 h-8 bg-gradient-to-br from-[#C9A876] to-[#B8956A] rounded-full flex items-center justify-center flex-shrink-0 mr-3 shadow-sm">
-                                <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
-                            </div>
-                            ` : ''}
-                                <div class="flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-xs md:max-w-md">
+                        <div class="w-8 h-8 bg-gradient-to-br from-[#C9A876] to-[#B8956A] rounded-full flex items-center justify-center flex-shrink-0 mr-3 shadow-sm">
+                            <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
+                        </div>
+                        ` : ''}
+                            <div class="flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-xs md:max-w-md">
                     <div class="flex items-center space-x-2 mb-1 ${isMyMessage ? 'flex-row-reverse space-x-reverse' : ''}">
                         <span class="font-medium text-[#8B7355] text-sm">${message.sender_name}</span>
                         <span class="text-xs text-[#A0845C]">${currentTime} WIB</span>
@@ -1222,19 +1225,23 @@
                     </div>
                 </div>
                 ${isMyMessage ? `
-                            <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
-                                <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
-                            </div>
-                            ` : ''}
+                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
+                            <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
+                        </div>
+                        ` : ''}
             `;
+
             const messagesDiv = document.querySelector('#messagesContainer .relative.z-10');
             messagesDiv.appendChild(messageDiv);
             scrollToBottom();
         }
+
+        // Global functions for location and directions
         window.shareLocation = function(name, lat, lng) {
             const locationUrl = lat && lng ?
-                `https://maps.google.com/maps?q=${lat},${lng}` :
-                'https://www.google.com/maps/dir/?api=1&destination=-6.2019928,106.925792';
+                `https://maps.google.com/?q=${lat},${lng}` :
+                'https://maps.google.com/?q=-6.2019928,106.925792';
+
             if (navigator.share) {
                 navigator.share({
                     title: `Location: ${name}`,
@@ -1249,95 +1256,18 @@
                 });
             }
         };
+
         window.getDirections = function(lat, lng) {
-            const directionsUrl =
-                `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.75037923707!2d106.925792!3d-6.2019928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698bb9d68516d3%3A0x867c293c6f932f91!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1689658253106!5m2!1sen!2sid${lat},${lng}`;
+            const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
             window.open(directionsUrl, '_blank');
             showNotification('🗺️ Opening directions...', 'info', 2000);
         };
+
         window.openImageModal = function(imageUrl, senderName) {
             document.getElementById('modalImage').src = imageUrl;
             document.getElementById('modalImageSender').textContent = `Shared by ${senderName}`;
             document.getElementById('imageModal').classList.remove('hidden');
         };
-
-        // --- NEW DRAG AND DROP FUNCTIONALITY ---
-        function makeDraggable(element) {
-            let pos1 = 0,
-                pos2 = 0,
-                pos3 = 0,
-                pos4 = 0;
-            const container = document.getElementById('videoCallModal').querySelector('.video-call-modal-container');
-
-            element.onmousedown = dragMouseDown;
-            element.ontouchstart = dragTouchStart;
-
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            }
-
-            function dragTouchStart(e) {
-                e = e || window.event;
-                e.preventDefault();
-                const touch = e.touches[0];
-                pos3 = touch.clientX;
-                pos4 = touch.clientY;
-                document.ontouchend = closeDragElement;
-                document.ontouchmove = elementDrag;
-            }
-
-            function elementDrag(e) {
-                e = e || window.event;
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
-
-                pos1 = pos3 - clientX;
-                pos2 = pos4 - clientY;
-                pos3 = clientX;
-                pos4 = clientY;
-
-                let newTop = element.offsetTop - pos2;
-                let newLeft = element.offsetLeft - pos1;
-
-                // Boundary checks
-                const containerRect = container.getBoundingClientRect();
-                const elementRect = element.getBoundingClientRect();
-
-                // Check top boundary (prevent dragging above the header)
-                const headerHeight = document.querySelector('.video-call-modal-container .p-4.text-center').offsetHeight;
-                if (newTop < headerHeight) {
-                    newTop = headerHeight;
-                }
-                // Check bottom boundary (prevent dragging below the controls)
-                const controlsHeight = document.querySelector('.video-call-modal-container .bottom-0').offsetHeight;
-                if (newTop > (containerRect.height - elementRect.height - controlsHeight)) {
-                    newTop = containerRect.height - elementRect.height - controlsHeight;
-                }
-                // Check left boundary
-                if (newLeft < 0) {
-                    newLeft = 0;
-                }
-                // Check right boundary
-                if (newLeft > (containerRect.width - elementRect.width)) {
-                    newLeft = containerRect.width - elementRect.width;
-                }
-
-                element.style.top = newTop + "px";
-                element.style.left = newLeft + "px";
-            }
-
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-                document.ontouchend = null;
-                document.ontouchmove = null;
-            }
-        }
 
         // DOM Content Loaded
         document.addEventListener('DOMContentLoaded', function() {
@@ -1345,7 +1275,11 @@
             const nameInput = document.getElementById('nameInput');
             const messageInput = document.getElementById('messageInput');
             const messagesContainer = document.getElementById('messagesContainer');
+
+            // Speaker button
             const speakerBtn = document.getElementById('speakerBtn');
+
+            // Attachment elements
             const imageBtn = document.getElementById('imageBtn');
             const locationBtn = document.getElementById('locationBtn');
             const imageInput = document.getElementById('imageInput');
@@ -1354,15 +1288,21 @@
             const locationPreview = document.getElementById('locationPreview');
             const removeImage = document.getElementById('removeImage');
             const removeLocation = document.getElementById('removeLocation');
+
+            // Location choice modal elements
             const locationChoiceModal = document.getElementById('locationChoiceModal');
             const closeLocationChoice = document.getElementById('closeLocationChoice');
             const shareCurrentLocation = document.getElementById('shareCurrentLocation');
             const shareWeddingVenue = document.getElementById('shareWeddingVenue');
+
+            // Location inputs
             const locationLat = document.getElementById('locationLat');
             const locationLng = document.getElementById('locationLng');
             const locationNameInput = document.getElementById('locationNameInput');
             const locationUrlInput = document.getElementById('locationUrlInput');
             const isWeddingVenueInput = document.getElementById('isWeddingVenueInput');
+
+            // Load participant info
             if (currentParticipant && currentParticipant.name) {
                 nameInput.value = currentParticipant.name;
             } else {
@@ -1371,20 +1311,37 @@
                     nameInput.value = savedName;
                 }
             }
+
+            // Save name to localStorage when typing
             nameInput.addEventListener('input', function() {
                 localStorage.setItem('chatName', this.value);
             });
+
+            // Initialize WIB clock
+            updateWIBClock();
+            setInterval(updateWIBClock, 1000); // Update every second
+
+            // Initialize audio player and realtime connection
+            console.log('🎵 Page loaded, initializing audio player and realtime connection...');
             initAudioPlayer();
+
+            // Initialize realtime connection after a short delay to ensure Echo is loaded
             setTimeout(() => {
                 initializeRealtime();
             }, 1000);
+
+            // Speaker button event
             if (speakerBtn) {
                 speakerBtn.addEventListener('click', toggleMusic);
             }
+
             scrollToBottom();
+
+            // Image upload functionality
             imageBtn.addEventListener('click', function() {
                 imageInput.click();
             });
+
             imageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -1396,18 +1353,25 @@
                     reader.readAsDataURL(file);
                 }
             });
+
             removeImage.addEventListener('click', function() {
                 imageInput.value = '';
                 hideAttachmentPreview();
             });
+
+            // Location sharing functionality
             if (locationBtn) {
                 locationBtn.addEventListener('click', function() {
                     locationChoiceModal.classList.remove('hidden');
                 });
             }
+
+            // Location choice modal events
             closeLocationChoice.addEventListener('click', function() {
                 locationChoiceModal.classList.add('hidden');
             });
+
+            // Share current location
             shareCurrentLocation.addEventListener('click', function() {
                 locationChoiceModal.classList.add('hidden');
                 if (navigator.geolocation) {
@@ -1421,20 +1385,26 @@
                             <p class="text-sm text-[#A0845C]">Please wait...</p>
                         </div>
                     `;
+
                     showNotification('📍 Getting your current location...', 'info', 3000);
+
                     navigator.geolocation.getCurrentPosition(function(position) {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
+
                         locationLat.value = lat;
                         locationLng.value = lng;
                         locationNameInput.value = 'Current Location';
                         locationUrlInput.value =
                             `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
                         isWeddingVenueInput.value = 'false';
+
                         document.getElementById('locationName').textContent = 'Current Location';
                         document.getElementById('locationCoords').textContent =
                             `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
                         showAttachmentPreview('location');
+
+                        // Reset button
                         shareCurrentLocation.disabled = false;
                         shareCurrentLocation.innerHTML = `
                             <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -1463,6 +1433,8 @@
                                 break;
                         }
                         showNotification(errorMessage, 'error');
+
+                        // Reset button
                         shareCurrentLocation.disabled = false;
                         shareCurrentLocation.innerHTML = `
                             <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -1481,29 +1453,37 @@
                     showNotification('Geolocation is not supported by this browser.', 'error');
                 }
             });
+
+            // Share wedding venue
             shareWeddingVenue.addEventListener('click', function() {
                 locationChoiceModal.classList.add('hidden');
+
                 const weddingVenueData = {
                     lat: -6.2019928,
                     lng: 106.925792,
                     name: 'Masjid Jami Al-Utsmani',
-                    url: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.192079040854!2d106.92321707503716!3d-6.201992893774889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698cd0b04c8f2b%3A0x673c6a4d7d3c5f4!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1753913917430!5m2!1sen!2sid',
+                    url: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.75037923707!2d106.925792!3d-6.2019928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698bb9d68516d3%3A0x867c293c6f932f91!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1689658253106!5m2!1sen!2sid',
                     is_wedding_venue: true
                 };
+
                 locationLat.value = weddingVenueData.lat;
                 locationLng.value = weddingVenueData.lng;
                 locationNameInput.value = weddingVenueData.name;
                 locationUrlInput.value = weddingVenueData.url;
                 isWeddingVenueInput.value = 'true';
+
                 document.getElementById('locationName').textContent = weddingVenueData.name;
                 document.getElementById('locationCoords').textContent = 'Wedding Venue Location';
                 showAttachmentPreview('location');
             });
+
+            // Close modal when clicking outside
             locationChoiceModal.addEventListener('click', function(e) {
                 if (e.target === locationChoiceModal) {
                     locationChoiceModal.classList.add('hidden');
                 }
             });
+
             removeLocation.addEventListener('click', function() {
                 locationLat.value = '';
                 locationLng.value = '';
@@ -1531,6 +1511,7 @@
                 imageInput.value = '';
             }
 
+            // Validate form before submit
             function validateForm() {
                 const name = nameInput.value.trim();
                 if (!name) {
@@ -1540,21 +1521,29 @@
                 }
                 return true;
             }
+
+            // Send message (for text, image, and location)
             messageForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+
                 if (!validateForm()) {
                     return;
                 }
+
                 const message = messageInput.value.trim();
                 const hasImage = imageInput.files.length > 0;
                 const hasLocation = locationLat.value && locationLng.value;
+
                 if (!message && !hasImage && !hasLocation) {
                     showNotification('Please enter a message, upload an image, or share a location',
                         'warning');
                     if (!hasImage && !hasLocation) messageInput.focus();
                     return;
                 }
+
                 const formData = new FormData(messageForm);
+
+                // Disable form while sending
                 const submitBtn = messageForm.querySelector('button[type="submit"]');
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `
@@ -1563,6 +1552,7 @@
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 `;
+
                 fetch(`{{ route('chat.send', $event->id) }}`, {
                         method: 'POST',
                         headers: {
@@ -1583,6 +1573,7 @@
                             isWeddingVenueInput.value = 'false';
                             hideAttachmentPreview();
                             addMessageToChat(data.message, true);
+
                             if (data.message.attachment_type === 'image') {
                                 showNotification('📷 Image sent successfully!', 'success', 2000);
                             } else if (data.message.attachment_type === 'location') {
@@ -1599,6 +1590,7 @@
                         showNotification('Failed to send message', 'error');
                     })
                     .finally(() => {
+                        // Re-enable form
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = `
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1608,14 +1600,19 @@
                         `;
                     });
             });
+
+            // Image modal functionality
             document.getElementById('closeImageModal').addEventListener('click', function() {
                 document.getElementById('imageModal').classList.add('hidden');
             });
+
             document.getElementById('imageModal').addEventListener('click', function(e) {
                 if (e.target === e.currentTarget) {
                     document.getElementById('imageModal').classList.add('hidden');
                 }
             });
+
+            // Video Call Modal (keeping existing functionality)
             const videoCallBtn = document.getElementById('videoCallBtn');
             const videoCallModal = document.getElementById('videoCallModal');
             const weddingVideoMain = document.getElementById('weddingVideoMain');
@@ -1627,22 +1624,26 @@
             const myVideoPlaceholder = document.getElementById('myVideoPlaceholder');
             const callStatus = document.getElementById('callStatus');
             const videoCallDuration = document.getElementById('videoCallDuration');
+
             const toggleMainVideoAudioBtn = document.getElementById('toggleMainVideoAudio');
             const mainAudioOnIcon = document.getElementById('mainAudioOnIcon');
             const mainAudioOffIcon = document.getElementById('mainAudioOffIcon');
+
             let videoCallTimer = null;
             let isMicMuted = false;
             let isCameraOn = true;
             let localStream = null;
             let isMainVideoMuted = false;
+
+            // Menu Modal
             const menuBtn = document.getElementById('menuBtn');
             const menuModal = document.getElementById('menuModal');
+            const menuModalContent = document.getElementById('menuModalContent');
             const closeMenu = document.getElementById('closeMenu');
             const viewEventBtn = document.getElementById('viewEventBtn');
             const shareEventBtn = document.getElementById('shareEventBtn');
             const settingsBtn = document.getElementById('settingsBtn');
             const helpBtn = document.getElementById('helpBtn');
-            const myCameraContainer = document.getElementById('myCameraContainer');
 
             function startVideoCallTimer() {
                 let seconds = 0;
@@ -1705,45 +1706,37 @@
                     if (myVideoFeed) myVideoFeed.srcObject = null;
                 }
             }
+
             if (videoCallBtn) {
                 videoCallBtn.addEventListener('click', function() {
-                    isVideoCallActive = true;
-                    pauseMusicForVideoCall();
                     videoCallModal.classList.remove('hidden');
                     requestUserMedia();
                     if (weddingVideoMain) {
-                        weddingVideoMain.muted = false;
                         weddingVideoMain.play().catch(e => console.error("Video playback failed:", e));
-                        isMainVideoMuted = false;
-                        mainAudioOnIcon.classList.remove('hidden');
-                        mainAudioOffIcon.classList.add('hidden');
                     }
-                    showNotification('📹 Video call started - Background music paused', 'info', 3000);
-                    // Panggil fungsi draggable pada elemen kamera pengguna setelah video call dimulai
-                    makeDraggable(myCameraContainer);
                 });
             }
+
             if (endVideoCall) {
                 endVideoCall.addEventListener('click', function() {
-                    isVideoCallActive = false;
                     videoCallModal.classList.add('hidden');
                     if (weddingVideoMain) {
                         weddingVideoMain.pause();
                         weddingVideoMain.currentTime = 0;
-                        weddingVideoMain.muted = true;
                     }
                     stopUserMedia();
                     stopVideoCallTimer();
                     if (callStatus) callStatus.textContent = 'Live broadcast...';
-                    resumeMusicAfterVideoCall();
-                    showNotification('📹 Video call ended - Background music resumed', 'info', 2000);
+                    showNotification('Video call ended.', 'info', 2000);
                 });
             }
+
             if (closeVideoModal) {
                 closeVideoModal.addEventListener('click', function() {
                     if (endVideoCall) endVideoCall.click();
                 });
             }
+
             if (toggleMainVideoAudioBtn) {
                 toggleMainVideoAudioBtn.addEventListener('click', function() {
                     if (weddingVideoMain) {
@@ -1756,6 +1749,7 @@
                     }
                 });
             }
+
             if (muteVideoBtn) {
                 muteVideoBtn.addEventListener('click', function() {
                     isMicMuted = !isMicMuted;
@@ -1771,6 +1765,7 @@
                     showNotification(isMicMuted ? '🔇 Audio muted' : '🔊 Audio unmuted', 'info', 1500);
                 });
             }
+
             if (cameraToggleBtn) {
                 cameraToggleBtn.addEventListener('click', function() {
                     isCameraOn = !isCameraOn;
@@ -1790,21 +1785,26 @@
                     showNotification(isCameraOn ? '📹 Camera is on' : '📹 Camera is off', 'info', 1500);
                 });
             }
+
+            // Menu Events
             if (menuBtn) {
                 menuBtn.addEventListener('click', function() {
                     menuModal.classList.remove('hidden');
                 });
             }
+
             if (closeMenu) {
                 closeMenu.addEventListener('click', function() {
                     menuModal.classList.add('hidden');
                 });
             }
+
             if (viewEventBtn) {
                 viewEventBtn.addEventListener('click', function() {
                     window.location.href = '{{ route('event.description', $event->id) }}';
                 });
             }
+
             if (shareEventBtn) {
                 shareEventBtn.addEventListener('click', function() {
                     if (navigator.share) {
@@ -1823,12 +1823,14 @@
                     menuModal.classList.add('hidden');
                 });
             }
+
             if (settingsBtn) {
                 settingsBtn.addEventListener('click', function() {
                     showNotification('Settings feature coming soon!', 'info');
                     menuModal.classList.add('hidden');
                 });
             }
+
             if (helpBtn) {
                 helpBtn.addEventListener('click', function() {
                     showNotification(
@@ -1837,6 +1839,8 @@
                     menuModal.classList.add('hidden');
                 });
             }
+
+            // Close modals when clicking outside
             [videoCallModal, menuModal, locationChoiceModal].forEach(modal => {
                 if (modal) {
                     modal.addEventListener('click', function(e) {
@@ -1848,10 +1852,7 @@
                                 if (weddingVideoMain) {
                                     weddingVideoMain.pause();
                                     weddingVideoMain.currentTime = 0;
-                                    weddingVideoMain.muted = true;
                                 }
-                                isVideoCallActive = false;
-                                resumeMusicAfterVideoCall();
                             }
                         }
                     });
@@ -1859,6 +1860,7 @@
             });
         });
 
+        // Handle window resize for notification repositioning
         window.addEventListener('resize', function() {
             const container = document.getElementById('notificationContainer');
             if (container) {
@@ -1901,6 +1903,22 @@
             100% {
                 transform: scale(0.95);
                 box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+        }
+
+        #wibClock {
+            animation: clockPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes clockPulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
             }
         }
 
@@ -1995,7 +2013,7 @@
 
         .space-y-2 button:hover {
             transform: translateY(-1px) scale(1.01);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .space-y-2 button:active {
@@ -2354,18 +2372,6 @@
 
         .location-bubble .space-y-2 button:hover svg {
             transform: scale(1.05);
-        }
-
-        .draggable-camera {
-            position: absolute;
-            top: 25%;
-            left: 20px;
-            cursor: grab;
-            touch-action: none;
-        }
-
-        .draggable-camera:active {
-            cursor: grabbing;
         }
     </style>
 @endsection

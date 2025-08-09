@@ -137,7 +137,7 @@
         <div
             class="bg-[#95755A]/95 backdrop-blur-md px-5 py-4 flex items-center justify-center shadow-sm border-b border-[#79614C] sticky top-0 z-50">
             <div class="flex items-center text-xl font-semibold text-white font-playful">
-                Hai! Selamat Datang
+                What's Up!
             </div>
         </div>
 
@@ -196,7 +196,7 @@
                     <button type="submit"
                         class="join-button bg-gradient-to-br from-[#79614C] to-[#5D4A3C] text-white border-none px-12 py-4 rounded-3xl text-base font-semibold cursor-pointer shadow-lg transition-all duration-300 ease-in-out mb-16 min-w-[200px] relative overflow-hidden focus:outline-none focus:ring-3 focus:ring-[#79614C] focus:ring-offset-2 hover:from-[#5D4A3C] hover:to-[#45372E] hover:translate-y-[-2px] hover:scale-105 hover:shadow-xl active:translate-y-0 active:scale-100"
                         id="joinButton">
-                        <span id="buttonText">🎉 Gabung Sekarang</span>
+                        <span id="buttonText">Join Sekarang</span>
                     </button>
                 </form>
             @endif
@@ -228,14 +228,14 @@
             button.disabled = true;
             buttonText.innerHTML = `
                 <div class="loading"></div>
-                Sedang Bergabung...
+                Proses Join
             `;
 
             // Re-enable button after 5 seconds in case of error
             setTimeout(() => {
                 if (button.disabled) {
                     button.disabled = false;
-                    buttonText.innerHTML = '🎉 Gabung Sekarang';
+                    buttonText.innerHTML = 'Join Sekarang';
                 }
             }, 5000);
         });
