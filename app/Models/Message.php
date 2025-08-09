@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Carbon\Carbon;
 
 class Message extends Model
 {
@@ -19,11 +20,14 @@ class Message extends Model
         'file_path',
         'attachment_type',
         'attachment_data',
-        'attachment_url'
+        'attachment_url',
+        'created_at',
+        'updated_at'
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
@@ -48,6 +52,46 @@ class Message extends Model
     public function getSenderNameAttribute()
     {
         return $this->attributes['sender_name'] ?? $this->participant?->name ?? 'Unknown';
+    }
+
+    /**
+     * Override untuk selalu return WIB timezone untuk created_at
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return $this->asDateTime($value)->setTimezone('Asia/Jakarta');
+    }
+
+    /**
+     * Override untuk selalu return WIB timezone untuk updated_at
+     */
+    public function getUpdatedAtAttribute($value)
+    {
+        return $this->asDateTime($value)->setTimezone('Asia/Jakarta');
+    }
+
+    /**
+     * Get formatted time in WIB
+     */
+    public function getFormattedTimeAttribute(): string
+    {
+        return $this->created_at->format('H:i');
+    }
+
+    /**
+     * Get formatted date time in WIB
+     */
+    public function getFormattedDateTimeAttribute(): string
+    {
+        return $this->created_at->format('d M Y, H:i');
+    }
+
+    /**
+     * Get full formatted date time with WIB suffix
+     */
+    public function getFullFormattedTimeAttribute(): string
+    {
+        return $this->created_at->format('d M Y, H:i') . ' WIB';
     }
 
     /**
@@ -110,22 +154,44 @@ class Message extends Model
                 return [
                     'type' => 'image',
                     'url' => $this->getImageUrl(),
-                    'alt' => 'Shared Image'
+                    'alt' => 'Shared Image',
+                    'size' => $this->getImageFileSize(),
+                    'exists' => $this->imageExists()
                 ];
-            
+                
             case 'location':
                 $locationData = $this->getLocationData();
                 return [
                     'type' => 'location',
                     'data' => $locationData,
                     'name' => $locationData['name'] ?? 'Shared Location',
-                    'coordinates' => $locationData['lat'] . ', ' . $locationData['lng'],
-                    'url' => $locationData['url'] ?? '#'
+                    'coordinates' => ($locationData['lat'] ?? '') . ', ' . ($locationData['lng'] ?? ''),
+                    'url' => $locationData['url'] ?? '#',
+                    'is_wedding_venue' => $locationData['is_wedding_venue'] ?? false,
+                    'map_url' => $this->getLocationMapUrl($locationData)
                 ];
-            
+                
             default:
                 return null;
         }
+    }
+
+    /**
+     * Get location map URL for embedding
+     */
+    private function getLocationMapUrl(?array $locationData): string
+    {
+        if (!$locationData) {
+            return '';
+        }
+
+        if ($locationData['is_wedding_venue'] ?? false) {
+            return 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.192079040854!2d106.92321707503716!3d-6.201992893774889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698cd0b04c8f2b%3A0x673c6a4d7d3c5f4!2sMasjid%20Jami%20Al-Utsmani!5e0!3m2!1sen!2sid!4v1753913917430!5m2!1sen!2sid';
+        }
+
+        $lat = $locationData['lat'] ?? -6.2088;
+        $lng = $locationData['lng'] ?? 106.8456;
+        return "https://maps.google.com/maps?q={$lat},{$lng}&z=15&output=embed";
     }
 
     /**
@@ -150,6 +216,35 @@ class Message extends Model
     public function scopeWithLocation($query)
     {
         return $query->where('attachment_type', 'location');
+    }
+
+    /**
+     * Scope untuk messages dalam rentang waktu tertentu (WIB)
+     */
+    public function scopeInTimeRange($query, $startTime, $endTime)
+    {
+        return $query->whereBetween('created_at', [
+            Carbon::parse($startTime, 'Asia/Jakarta')->utc(),
+            Carbon::parse($endTime, 'Asia/Jakarta')->utc()
+        ]);
+    }
+
+    /**
+     * Scope untuk messages hari ini (WIB)
+     */
+    public function scopeToday($query)
+    {
+        $today = Carbon::now('Asia/Jakarta');
+        return $query->whereDate('created_at', $today->toDateString());
+    }
+
+    /**
+     * Scope untuk messages kemarin (WIB)
+     */
+    public function scopeYesterday($query)
+    {
+        $yesterday = Carbon::yesterday('Asia/Jakarta');
+        return $query->whereDate('created_at', $yesterday->toDateString());
     }
 
     /**
@@ -209,14 +304,151 @@ class Message extends Model
     }
 
     /**
-     * Boot method untuk handle file deletion
+     * Get message content for search/display
+     */
+    public function getContentAttribute(): string
+    {
+        if (!empty($this->message)) {
+            return $this->message;
+        }
+
+        if ($this->isImageAttachment()) {
+            return '📷 Shared an image';
+        }
+
+        if ($this->isLocationAttachment()) {
+            $locationData = $this->getLocationData();
+            $locationName = $locationData['name'] ?? 'location';
+            return "📍 Shared {$locationName}";
+        }
+
+        return 'Sent an attachment';
+    }
+
+    /**
+     * Get message summary for notifications
+     */
+    public function getSummaryAttribute(): string
+    {
+        $senderName = $this->sender_name ?? 'Someone';
+        
+        if (!empty($this->message)) {
+            $preview = strlen($this->message) > 50 
+                ? substr($this->message, 0, 50) . '...' 
+                : $this->message;
+            return "{$senderName}: {$preview}";
+        }
+
+        return "{$senderName}: {$this->content}";
+    }
+
+    /**
+     * Check if message is from today (WIB)
+     */
+    public function isFromToday(): bool
+    {
+        $today = Carbon::now('Asia/Jakarta')->startOfDay();
+        return $this->created_at->gte($today);
+    }
+
+    /**
+     * Check if message is from yesterday (WIB)
+     */
+    public function isFromYesterday(): bool
+    {
+        $yesterday = Carbon::yesterday('Asia/Jakarta');
+        return $this->created_at->isSameDay($yesterday);
+    }
+
+    /**
+     * Get relative time (e.g., "2 hours ago") in WIB context
+     */
+    public function getRelativeTimeAttribute(): string
+    {
+        return $this->created_at->diffForHumans();
+    }
+
+    /**
+     * Get time ago in Indonesian
+     */
+    public function getTimeAgoIndonesianAttribute(): string
+    {
+        $diff = $this->created_at->diffInMinutes(Carbon::now('Asia/Jakarta'));
+        
+        if ($diff < 1) {
+            return 'Baru saja';
+        } elseif ($diff < 60) {
+            return $diff . ' menit yang lalu';
+        } elseif ($diff < 1440) { // 24 hours
+            $hours = floor($diff / 60);
+            return $hours . ' jam yang lalu';
+        } elseif ($diff < 10080) { // 7 days
+            $days = floor($diff / 1440);
+            return $days . ' hari yang lalu';
+        } else {
+            return $this->created_at->format('d M Y');
+        }
+    }
+
+    /**
+     * Convert message to array for API response
+     */
+    public function toApiArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'message' => $this->message,
+            'sender_name' => $this->sender_name,
+            'attachment_type' => $this->attachment_type,
+            'attachment_url' => $this->attachment_url,
+            'attachment_data' => $this->attachment_data,
+            'location_data' => $this->getLocationData(),
+            'attachment_preview' => $this->getAttachmentPreview(),
+            'content' => $this->content,
+            'summary' => $this->summary,
+            'created_at' => $this->created_at->format('H:i'),
+            'created_at_full' => $this->created_at->format('Y-m-d H:i:s'),
+            'formatted_time' => $this->formatted_time,
+            'formatted_date_time' => $this->formatted_date_time,
+            'full_formatted_time' => $this->full_formatted_time,
+            'relative_time' => $this->relative_time,
+            'time_ago_indonesian' => $this->time_ago_indonesian,
+            'is_from_today' => $this->isFromToday(),
+            'is_from_yesterday' => $this->isFromYesterday(),
+            'timezone' => 'WIB',
+            'participant' => [
+                'id' => $this->participant->id ?? null,
+                'name' => $this->participant->name ?? null,
+                'avatar' => $this->participant->avatar ?? null
+            ]
+        ];
+    }
+
+    /**
+     * Boot method untuk handle file deletion dan timezone
      */
     protected static function boot()
     {
         parent::boot();
 
+        // Handle file deletion saat message dihapus
         static::deleting(function ($message) {
             $message->deleteAttachmentFile();
+        });
+
+        // Set timezone WIB saat creating message
+        static::creating(function ($message) {
+            if (!$message->created_at) {
+                $message->created_at = Carbon::now('Asia/Jakarta');
+            }
+        if (!$message->updated_at) {
+                $message->updated_at = Carbon::now('Asia/Jakarta');
+            }
+        });
+
+        // Set timezone WIB saat updating message
+        static::updating(function ($message) {
+            $message->updated_at = Carbon::now('Asia/Jakarta');
         });
     }
 }

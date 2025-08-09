@@ -69,7 +69,7 @@ Route::get('/debug-data', function() {
 Route::middleware(['participant'])->group(function () {
     Route::get('/chat/{event}', [ChatController::class, 'room'])->name('chat.room');
     Route::post('/chat/{event}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
-    Route::get('/chat/{event}/profile/{participant}', [ChatController::class, 'profile'])->name('chat.profile');
+    // Route::get('/chat/{event}/profile/{participant}', [ChatController::class, 'profile'])->name('chat.profile');
     
     // Event routes
     Route::get('/event/{event}/description', [EventController::class, 'description'])->name('event.description');
@@ -105,7 +105,3 @@ Route::get('/storage-link', function() {
 });
 
 Route::get('/event/{event}/gallery', [EventController::class, 'gallery'])->name('event.gallery');
-
-Route::get('/check', function(){
-    return ('<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.466739821635!2d106.925792!3d-6.2019928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698b7439c3d1a5%3A0x33a5ea1277612ff5!2sMasjid%20Jami%20Al%20Utsmani!5e0!3m2!1sid!2sid!4v1753913917430!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>');
-});

@@ -266,7 +266,7 @@
     </div>
 
     <!-- Video Call Modal -->
-    <div id="videoCallModal"
+    {{-- <div id="videoCallModal"
         class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
             <div class="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-4 text-center">
@@ -292,9 +292,9 @@
                         <p class="text-gray-400">Wedding memories will be shared here</p>
                     </div>
                 @endif
-            </div>
+            </div> --}}
 
-            <div class="p-4 bg-gray-50 flex justify-center space-x-4">
+    {{-- <div class="p-4 bg-gray-50 flex justify-center space-x-4">
                 <button id="endVideoCall" class="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
@@ -303,7 +303,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Information Modal -->
     <div id="informationModal"

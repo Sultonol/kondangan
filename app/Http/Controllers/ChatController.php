@@ -9,18 +9,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use App\Events\MessageSent;
 
 class ChatController extends Controller
 {
     public function room(Event $event)
     {
-        // Get messages for this event
+        // Get messages for this event with WIB timezone
         $messages = $event->messages()
             ->with('participant')
             ->latest()
             ->take(50)
             ->get()
-            ->reverse();
+            ->reverse()
+            ->map(function ($message) {
+                // Convert to WIB timezone
+                $message->created_at = $message->created_at->setTimezone('Asia/Jakarta');
+                return $message;
+            });
 
         // Check if location has already been shared
         $locationShared = $event->messages()
@@ -34,6 +40,9 @@ class ChatController extends Controller
                 ->where('attachment_type', 'location')
                 ->with('participant')
                 ->first();
+            if ($locationMessage) {
+                $locationMessage->created_at = $locationMessage->created_at->setTimezone('Asia/Jakarta');
+            }
         }
 
         // Get videos from media for video call
@@ -50,7 +59,7 @@ class ChatController extends Controller
         if ($participantId) {
             $currentParticipant = Participant::find($participantId);
         }
-            
+                    
         return view('chat.room', compact('event', 'messages', 'videos', 'mainVideo', 'currentParticipant', 'locationShared', 'locationMessage'));
     }
 
@@ -59,7 +68,7 @@ class ChatController extends Controller
         // Rate limiting untuk chat
         $participantId = session('participant_id');
         $key = 'chat:' . ($participantId ?: $request->ip());
-        
+                
         if (RateLimiter::tooManyAttempts($key, 30)) {
             $seconds = RateLimiter::availableIn($key);
             return response()->json([
@@ -78,13 +87,13 @@ class ChatController extends Controller
             'location_name' => 'nullable|string|max:255',
             'location_url' => 'nullable|url'
         ]);
-                
+                        
         if (!$participantId) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $participant = Participant::find($participantId);
-                
+                        
         if (!$participant || $participant->event_id !== $event->id) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
@@ -96,28 +105,18 @@ class ChatController extends Controller
             ], 422);
         }
 
-        // Check apakah nama sudah digunakan participant lain di event yang sama
-        // $existingParticipant = Participant::where('event_id', $event->id)
-        //     ->where('name', $request->name)
-        //     ->where('id', '!=', $participant->id)
-        //     ->first();
-
-        // if ($existingParticipant) {
-        //     return response()->json([
-        //         'error' => 'Nama sudah digunakan, silakan pilih nama lain'
-        //     ], 422);
-        // }
-
         // Update participant name
         $participant->update(['name' => $request->name]);
 
-        // Prepare message data
+        // Prepare message data with WIB timezone - PERBAIKAN TIMEZONE
+        $wibTime = Carbon::now('Asia/Jakarta');
         $messageData = [
             'event_id' => $event->id,
             'participant_id' => $participant->id,
             'sender_name' => $request->name,
             'message' => $request->message ?: '',
-            'created_at' => Carbon::now('Asia/Jakarta')
+            'created_at' => $wibTime,
+            'updated_at' => $wibTime
         ];
 
         // Handle image upload
@@ -125,32 +124,22 @@ class ChatController extends Controller
             $image = $request->file('image');
             $filename = time() . '_' . $image->getClientOriginalName();
             $path = $image->storeAs('chat/images', $filename, 'public');
-            
+                        
             $messageData['attachment_type'] = 'image';
             $messageData['attachment_data'] = $path;
             $messageData['attachment_url'] = asset('storage/' . $path);
         }
 
-        // Handle location sharing - check if already shared
+        // Handle location sharing - REMOVED VALIDATION FOR MULTIPLE LOCATIONS
         if ($request->location_lat && $request->location_lng) {
-            // Check if location already shared for this event
-            $existingLocation = Message::where('event_id', $event->id)
-                ->where('attachment_type', 'location')
-                ->first();
-            
-            if ($existingLocation) {
-                return response()->json([
-                    'error' => 'Location has already been shared by ' . $existingLocation->sender_name
-                ], 422);
-            }
-            
             $locationData = [
                 'lat' => $request->location_lat,
                 'lng' => $request->location_lng,
                 'name' => $request->location_name ?: 'Event Location',
-                'url' => $request->location_url ?: "https://www.google.com/maps?q={$request->location_lat},{$request->location_lng}"
+                'url' => $request->location_url ?: "https://www.google.com/maps?q={$request->location_lat},{$request->location_lng}",
+                'is_wedding_venue' => $request->is_wedding_venue === 'true'
             ];
-            
+                        
             $messageData['attachment_type'] = 'location';
             $messageData['attachment_data'] = json_encode($locationData);
             $messageData['attachment_url'] = $locationData['url'];
@@ -162,20 +151,28 @@ class ChatController extends Controller
         // Load participant relationship
         $message->load('participant');
 
+        // Set timezone to WIB for response - PERBAIKAN TIMEZONE
+        $message->created_at = $message->created_at->setTimezone('Asia/Jakarta');
+
         // Update participant last seen
         $participant->updateLastSeen();
+
+        // BROADCAST THE MESSAGE EVENT FOR REALTIME
+        event(new MessageSent($message));
 
         return response()->json([
             'success' => true,
             'message' => [
                 'id' => $message->id,
                 'message' => $message->message,
-                'created_at' => $message->created_at->format('H:i'),
+                'created_at' => $message->created_at->format('H:i'), // FORMAT WIB
+                'created_at_full' => $message->created_at->format('Y-m-d H:i:s'), // FULL TIMESTAMP WIB
                 'sender_name' => $message->sender_name,
                 'attachment_type' => $message->attachment_type,
                 'attachment_url' => $message->attachment_url,
                 'attachment_data' => $message->attachment_data,
                 'location_data' => $message->getLocationData(),
+                'timezone' => 'WIB', // TAMBAHAN TIMEZONE INFO
                 'participant' => [
                     'id' => $participant->id,
                     'name' => $participant->name
@@ -184,19 +181,6 @@ class ChatController extends Controller
         ]);
     }
 
-    public function profile(Event $event, Participant $participant)
-    {
-        // Make sure participant belongs to this event
-        if ($participant->event_id !== $event->id) {
-            abort(404);
-        }
-
-        return view('chat.profile', compact('event', 'participant'));
-    }
-
-    /**
-     * Get videos for video call (AJAX)
-     */
     public function getVideos(Event $event)
     {
         $videos = $event->media()
