@@ -797,12 +797,12 @@
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1">
                                         ${isWeddingVenue ? `
-                                                <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
-                                                <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
-                                            ` : `
-                                                <p class="text-sm font-medium text-gray-800">${locationName}</p>
-                                                <p class="text-xs text-gray-600">Shared current location</p>
-                                            `}
+                                                                <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
+                                                                <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
+                                                            ` : `
+                                                                <p class="text-sm font-medium text-gray-800">${locationName}</p>
+                                                                <p class="text-xs text-gray-600">Shared current location</p>
+                                                            `}
                                         <p class="text-xs text-gray-500 mt-1">${locationLatVal}, ${locationLngVal}</p>
                                     </div>
                                     <div class="text-right">
@@ -1163,12 +1163,12 @@
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1">
                                         ${isWeddingVenue ? `
-                                                <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
-                                                <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
-                                                ` : `
-                                                <p class="text-sm font-medium text-gray-800">${locationName}</p>
-                                                <p class="text-xs text-gray-600">Shared current location</p>
-                                                `}
+                                                                <p class="text-sm font-medium text-gray-800">Masjid Jami Al-Utsmani</p>
+                                                                <p class="text-xs text-gray-600">Jatinegara, Cakung, Jakarta Timur</p>
+                                                                ` : `
+                                                                <p class="text-sm font-medium text-gray-800">${locationName}</p>
+                                                                <p class="text-xs text-gray-600">Shared current location</p>
+                                                                `}
                                         <p class="text-xs text-gray-500 mt-1">${locationLatVal}, ${locationLngVal}</p>
                                     </div>
                                     <div class="text-right">
@@ -1208,27 +1208,27 @@
 
             messageDiv.innerHTML = `
                 ${!isMyMessage ? `
-                        <div class="w-8 h-8 bg-gradient-to-br from-[#C9A876] to-[#B8956A] rounded-full flex items-center justify-center flex-shrink-0 mr-3 shadow-sm">
-                            <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
-                        </div>
-                        ` : ''}
+                                        <div class="w-8 h-8 bg-gradient-to-br from-[#C9A876] to-[#B8956A] rounded-full flex items-center justify-center flex-shrink-0 mr-3 shadow-sm">
+                                            <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
+                                        </div>
+                                        ` : ''}
                             <div class="flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-xs md:max-w-md">
                     <div class="flex items-center space-x-2 mb-1 ${isMyMessage ? 'flex-row-reverse space-x-reverse' : ''}">
                         <span class="font-medium text-[#8B7355] text-sm">${message.sender_name}</span>
                         <span class="text-xs text-[#A0845C]">${currentTime} WIB</span>
                     </div>
                     <div class="rounded-2xl shadow-sm border max-w-full break-words ${isMyMessage
-                        ? 'bg-green-500 text-white border-green-400 rounded-br-md'
+                        ? 'bg-gray-500 text-white border-gray-400 rounded-br-md'
                         : 'bg-white text-gray-800 border-gray-200 rounded-bl-md'}">
                         ${attachmentHtml}
                         ${message.message ? `<div class="p-3 ${attachmentHtml ? 'pt-2' : ''}"><p class="text-sm leading-relaxed">${message.message}</p></div>` : ''}
                     </div>
                 </div>
                 ${isMyMessage ? `
-                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
-                            <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
-                        </div>
-                        ` : ''}
+                                        <div class="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center flex-shrink-0 ml-3 shadow-sm">
+                                            <span class="text-white font-medium text-xs">${message.sender_name.charAt(0)}</span>
+                                        </div>
+                                        ` : ''}
             `;
 
             const messagesDiv = document.querySelector('#messagesContainer .relative.z-10');

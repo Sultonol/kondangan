@@ -383,7 +383,7 @@
                         event
                             .stopPropagation();
                         const accountNumberElement = this.closest('.relative').querySelector(
-                                '.account-number');
+                            '.account-number');
                         if (accountNumberElement) {
                             const accountNumber = accountNumberElement.getAttribute(
                                 'data-account-number');
